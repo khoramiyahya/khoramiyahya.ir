@@ -134,6 +134,8 @@ Useful endpoints:
 - Newsletter unsubscribe: `POST /api/v1/newsletter/unsubscribe`
 - Newsletter subscribers: `GET /api/v1/newsletter/subscribers?activeOnly=true`
 - Delete newsletter subscriber: `DELETE /api/v1/newsletter/subscribers/{id}`
+- Public site settings: `GET /api/v1/settings/public`
+- My site settings: `GET/PUT /api/v1/settings/me`
 
 
 ## Apply EF Core migrations

@@ -11,6 +11,7 @@ using PersonalBrand.Domain.Newsletter;
 using PersonalBrand.Domain.Profiles;
 using PersonalBrand.Domain.Projects;
 using PersonalBrand.Domain.Services;
+using PersonalBrand.Domain.Settings;
 using PersonalBrand.Domain.Skills;
 using PersonalBrand.Domain.Testimonials;
 using PersonalBrand.Infrastructure.Identity;
@@ -53,6 +54,8 @@ public sealed class ApplicationDbContext
     public DbSet<Certification> Certifications => Set<Certification>();
 
     public DbSet<NewsletterSubscriber> NewsletterSubscribers => Set<NewsletterSubscriber>();
+
+    public DbSet<SiteSettings> SiteSettings => Set<SiteSettings>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
