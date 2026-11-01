@@ -5,6 +5,7 @@ using PersonalBrand.Domain.Blog;
 using PersonalBrand.Domain.Contact;
 using PersonalBrand.Domain.Education;
 using PersonalBrand.Domain.Experience;
+using PersonalBrand.Domain.Faq;
 using PersonalBrand.Domain.Profiles;
 using PersonalBrand.Domain.Projects;
 using PersonalBrand.Domain.Services;
@@ -44,6 +45,8 @@ public sealed class ApplicationDbContext
     public DbSet<WorkExperience> WorkExperiences => Set<WorkExperience>();
 
     public DbSet<EducationEntry> EducationEntries => Set<EducationEntry>();
+
+    public DbSet<FaqItem> FaqItems => Set<FaqItem>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

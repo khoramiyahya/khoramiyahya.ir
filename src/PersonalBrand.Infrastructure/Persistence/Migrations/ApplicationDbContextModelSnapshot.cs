@@ -398,6 +398,59 @@ namespace PersonalBrand.Infrastructure.Persistence.Migrations
                     b.ToTable("WorkExperiences", (string)null);
                 });
 
+            modelBuilder.Entity("PersonalBrand.Domain.Faq.FaqItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Answer")
+                        .IsRequired()
+                        .HasMaxLength(8000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Category")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsFeatured")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPublished")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Question")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTimeOffset>("UpdatedAtUtc")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Category");
+
+                    b.HasIndex("IsFeatured");
+
+                    b.HasIndex("IsPublished");
+
+                    b.HasIndex("UserId", "DisplayOrder");
+
+                    b.ToTable("FaqItems", (string)null);
+                });
+
             modelBuilder.Entity("PersonalBrand.Domain.Profiles.BrandProfile", b =>
                 {
                     b.Property<Guid>("Id")

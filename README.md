@@ -120,6 +120,11 @@ Useful endpoints:
 - My education: `GET/POST /api/v1/education/me`
 - Update/delete education: `PUT/DELETE /api/v1/education/me/{id}`
 - Publish/unpublish education: `POST /api/v1/education/me/{id}/publish|unpublish`
+- Public FAQ: `GET /api/v1/faq/public`
+- Public FAQ item: `GET /api/v1/faq/public/{id}`
+- My FAQ: `GET/POST /api/v1/faq/me`
+- Update/delete FAQ: `PUT/DELETE /api/v1/faq/me/{id}`
+- Publish/unpublish FAQ: `POST /api/v1/faq/me/{id}/publish|unpublish`
 
 
 ## Apply EF Core migrations
