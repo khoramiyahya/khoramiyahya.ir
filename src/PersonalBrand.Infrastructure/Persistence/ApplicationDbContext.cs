@@ -7,6 +7,7 @@ using PersonalBrand.Domain.Contact;
 using PersonalBrand.Domain.Education;
 using PersonalBrand.Domain.Experience;
 using PersonalBrand.Domain.Faq;
+using PersonalBrand.Domain.Media;
 using PersonalBrand.Domain.Newsletter;
 using PersonalBrand.Domain.Profiles;
 using PersonalBrand.Domain.Projects;
@@ -56,6 +57,8 @@ public sealed class ApplicationDbContext
     public DbSet<NewsletterSubscriber> NewsletterSubscribers => Set<NewsletterSubscriber>();
 
     public DbSet<SiteSettings> SiteSettings => Set<SiteSettings>();
+
+    public DbSet<MediaAsset> MediaAssets => Set<MediaAsset>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

@@ -137,6 +137,9 @@ Useful endpoints:
 - Public site settings: `GET /api/v1/settings/public`
 - My site settings: `GET/PUT /api/v1/settings/me`
 - Dashboard summary: `GET /api/v1/dashboard/summary`
+- My media: `GET/POST /api/v1/media/me`
+- Media item: `GET/PUT/DELETE /api/v1/media/me/{id}`
+- Upload media: `POST /api/v1/media/me` (multipart `file`, optional `title`, `altText`)
 
 
 ## Apply EF Core migrations

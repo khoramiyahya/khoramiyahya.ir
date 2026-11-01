@@ -60,4 +60,26 @@ public sealed class FileStorageOptions
         ".webp",
         ".gif"
     ];
+
+    /// <summary>
+    /// Maximum media library upload size in bytes.
+    /// </summary>
+    public long MediaMaxBytes { get; set; } = 8 * 1024 * 1024;
+
+    public string[] AllowedMediaContentTypes { get; set; } =
+    [
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "image/gif"
+    ];
+
+    public string[] AllowedMediaExtensions { get; set; } =
+    [
+        ".jpg",
+        ".jpeg",
+        ".png",
+        ".webp",
+        ".gif"
+    ];
 }

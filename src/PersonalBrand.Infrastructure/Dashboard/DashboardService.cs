@@ -79,6 +79,8 @@ internal sealed class DashboardService : IDashboardService
         var newsletterActive = await _dbContext.NewsletterSubscribers.CountAsync(item => item.IsActive, cancellationToken);
         var newsletterTotal = await _dbContext.NewsletterSubscribers.CountAsync(cancellationToken);
 
+        var mediaTotal = await _dbContext.MediaAssets.CountAsync(item => item.UserId == userId, cancellationToken);
+
         var hasPublishedProfile = await _dbContext.BrandProfiles.AnyAsync(
             profile => profile.UserId == userId && profile.IsPublished,
             cancellationToken);
@@ -107,6 +109,7 @@ internal sealed class DashboardService : IDashboardService
             ContactMessagesUnread = contactUnread,
             NewsletterSubscribersActive = newsletterActive,
             NewsletterSubscribersTotal = newsletterTotal,
+            MediaAssetsTotal = mediaTotal,
             HasPublishedProfile = hasPublishedProfile,
             GeneratedAtUtc = _dateTimeProvider.UtcNow
         };

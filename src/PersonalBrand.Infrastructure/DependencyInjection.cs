@@ -12,6 +12,7 @@ using PersonalBrand.Application.Dashboard;
 using PersonalBrand.Application.Education;
 using PersonalBrand.Application.Experience;
 using PersonalBrand.Application.Faq;
+using PersonalBrand.Application.Media;
 using PersonalBrand.Application.Newsletter;
 using PersonalBrand.Application.Profiles;
 using PersonalBrand.Application.Projects;
@@ -28,6 +29,7 @@ using PersonalBrand.Infrastructure.Education;
 using PersonalBrand.Infrastructure.Experience;
 using PersonalBrand.Infrastructure.Faq;
 using PersonalBrand.Infrastructure.Identity;
+using PersonalBrand.Infrastructure.Media;
 using PersonalBrand.Infrastructure.Newsletter;
 using PersonalBrand.Infrastructure.Settings;
 using PersonalBrand.Infrastructure.Options;
@@ -106,6 +108,7 @@ public static class DependencyInjection
         services.AddScoped<INewsletterService, NewsletterService>();
         services.AddScoped<ISiteSettingsService, SiteSettingsService>();
         services.AddScoped<IDashboardService, DashboardService>();
+        services.AddScoped<IMediaService, MediaService>();
 
         return services;
     }

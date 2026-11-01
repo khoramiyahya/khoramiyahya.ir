@@ -49,6 +49,8 @@ public sealed class DashboardSummaryDto
 
     public required int NewsletterSubscribersTotal { get; init; }
 
+    public required int MediaAssetsTotal { get; init; }
+
     public required bool HasPublishedProfile { get; init; }
 
     public required DateTimeOffset GeneratedAtUtc { get; init; }
