@@ -305,6 +305,33 @@ internal sealed class SearchService : ISearchService
             results.AddRange(awards);
         }
 
+        if (ShouldInclude(contentType, "talk"))
+        {
+            var talks = await _dbContext.Talks
+                .AsNoTracking()
+                .Where(item => item.IsPublished)
+                .Where(item =>
+                    item.Title.Contains(query)
+                    || item.EventName.Contains(query)
+                    || (item.Location != null && item.Location.Contains(query))
+                    || (item.Description != null && item.Description.Contains(query)))
+                .OrderByDescending(item => item.UpdatedAtUtc)
+                .Take(limit)
+                .Select(item => new SearchResultItemDto
+                {
+                    Id = item.Id,
+                    ContentType = "talk",
+                    Title = item.Title,
+                    Summary = item.EventName,
+                    Slug = null,
+                    UrlHint = $"/talks/{item.Id}",
+                    UpdatedAtUtc = item.UpdatedAtUtc
+                })
+                .ToListAsync(cancellationToken);
+
+            results.AddRange(talks);
+        }
+
         var ranked = results
             .OrderByDescending(item => item.UpdatedAtUtc)
             .Take(limit)

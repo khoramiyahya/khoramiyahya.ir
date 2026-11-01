@@ -28,6 +28,7 @@ using PersonalBrand.Application.Settings;
 using PersonalBrand.Application.Sitemap;
 using PersonalBrand.Application.Skills;
 using PersonalBrand.Application.SocialLinks;
+using PersonalBrand.Application.Talks;
 using PersonalBrand.Application.Testimonials;
 using PersonalBrand.Infrastructure.Auth;
 using PersonalBrand.Infrastructure.Awards;
@@ -55,6 +56,7 @@ using PersonalBrand.Infrastructure.Search;
 using PersonalBrand.Infrastructure.Services;
 using PersonalBrand.Infrastructure.ServicesCatalog;
 using PersonalBrand.Infrastructure.Sitemap;
+using PersonalBrand.Infrastructure.Talks;
 using PersonalBrand.Infrastructure.Skills;
 using PersonalBrand.Infrastructure.SocialLinks;
 using PersonalBrand.Infrastructure.Storage;
@@ -136,6 +138,7 @@ public static class DependencyInjection
         services.AddScoped<IRobotsService, RobotsService>();
         services.AddScoped<IPartnerService, PartnerService>();
         services.AddScoped<IAwardService, AwardService>();
+        services.AddScoped<ITalkService, TalkService>();
 
         return services;
     }

@@ -21,6 +21,7 @@ using PersonalBrand.Domain.Services;
 using PersonalBrand.Domain.Settings;
 using PersonalBrand.Domain.Skills;
 using PersonalBrand.Domain.SocialLinks;
+using PersonalBrand.Domain.Talks;
 using PersonalBrand.Domain.Testimonials;
 using PersonalBrand.Infrastructure.Identity;
 
@@ -80,6 +81,8 @@ public sealed class ApplicationDbContext
     public DbSet<Partner> Partners => Set<Partner>();
 
     public DbSet<Award> Awards => Set<Award>();
+
+    public DbSet<Talk> Talks => Set<Talk>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

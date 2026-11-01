@@ -177,6 +177,11 @@ Useful endpoints:
 - My awards: `GET/POST /api/v1/awards/me`
 - Update/delete award: `PUT/DELETE /api/v1/awards/me/{id}`
 - Publish/unpublish award: `POST /api/v1/awards/me/{id}/publish|unpublish`
+- Public talks: `GET /api/v1/talks/public`
+- Public talk: `GET /api/v1/talks/public/{id}`
+- My talks: `GET/POST /api/v1/talks/me`
+- Update/delete talk: `PUT/DELETE /api/v1/talks/me/{id}`
+- Publish/unpublish talk: `POST /api/v1/talks/me/{id}/publish|unpublish`
 
 
 ## Apply EF Core migrations
