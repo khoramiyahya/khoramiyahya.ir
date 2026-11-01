@@ -1008,6 +1008,73 @@ namespace PersonalBrand.Infrastructure.Persistence.Migrations
                     b.ToTable("PortfolioProjects", (string)null);
                 });
 
+            modelBuilder.Entity("PersonalBrand.Domain.Publications.Publication", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsFeatured")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPublished")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PublicationType")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateOnly>("PublishedOn")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Publisher")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTimeOffset>("UpdatedAtUtc")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Url")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsFeatured");
+
+                    b.HasIndex("IsPublished");
+
+                    b.HasIndex("PublicationType");
+
+                    b.HasIndex("PublishedOn");
+
+                    b.HasIndex("UserId", "DisplayOrder");
+
+                    b.ToTable("Publications", (string)null);
+                });
+
             modelBuilder.Entity("PersonalBrand.Domain.Redirects.SeoRedirect", b =>
                 {
                     b.Property<Guid>("Id")

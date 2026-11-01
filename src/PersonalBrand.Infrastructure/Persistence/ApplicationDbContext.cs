@@ -15,6 +15,7 @@ using PersonalBrand.Domain.Pages;
 using PersonalBrand.Domain.Partners;
 using PersonalBrand.Domain.Profiles;
 using PersonalBrand.Domain.Projects;
+using PersonalBrand.Domain.Publications;
 using PersonalBrand.Domain.Redirects;
 using PersonalBrand.Domain.Robots;
 using PersonalBrand.Domain.Services;
@@ -83,6 +84,8 @@ public sealed class ApplicationDbContext
     public DbSet<Award> Awards => Set<Award>();
 
     public DbSet<Talk> Talks => Set<Talk>();
+
+    public DbSet<Publication> Publications => Set<Publication>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

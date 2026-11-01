@@ -182,6 +182,11 @@ Useful endpoints:
 - My talks: `GET/POST /api/v1/talks/me`
 - Update/delete talk: `PUT/DELETE /api/v1/talks/me/{id}`
 - Publish/unpublish talk: `POST /api/v1/talks/me/{id}/publish|unpublish`
+- Public publications: `GET /api/v1/publications/public`
+- Public publication: `GET /api/v1/publications/public/{id}`
+- My publications: `GET/POST /api/v1/publications/me`
+- Update/delete publication: `PUT/DELETE /api/v1/publications/me/{id}`
+- Publish/unpublish publication: `POST /api/v1/publications/me/{id}/publish|unpublish`
 
 
 ## Apply EF Core migrations

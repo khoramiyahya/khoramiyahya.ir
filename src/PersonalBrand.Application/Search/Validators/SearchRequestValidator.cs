@@ -18,7 +18,8 @@ public sealed class SearchRequestValidator : AbstractValidator<SearchRequest>
         "experience",
         "education",
         "award",
-        "talk"
+        "talk",
+        "publication"
     };
 
     public SearchRequestValidator()

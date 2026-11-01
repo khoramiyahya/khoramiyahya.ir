@@ -20,6 +20,7 @@ using PersonalBrand.Application.Pages;
 using PersonalBrand.Application.Partners;
 using PersonalBrand.Application.Profiles;
 using PersonalBrand.Application.Projects;
+using PersonalBrand.Application.Publications;
 using PersonalBrand.Application.Redirects;
 using PersonalBrand.Application.Robots;
 using PersonalBrand.Application.Search;
@@ -50,6 +51,7 @@ using PersonalBrand.Infrastructure.Options;
 using PersonalBrand.Infrastructure.Persistence;
 using PersonalBrand.Infrastructure.Profiles;
 using PersonalBrand.Infrastructure.Projects;
+using PersonalBrand.Infrastructure.Publications;
 using PersonalBrand.Infrastructure.Redirects;
 using PersonalBrand.Infrastructure.Robots;
 using PersonalBrand.Infrastructure.Search;
@@ -139,6 +141,7 @@ public static class DependencyInjection
         services.AddScoped<IPartnerService, PartnerService>();
         services.AddScoped<IAwardService, AwardService>();
         services.AddScoped<ITalkService, TalkService>();
+        services.AddScoped<IPublicationService, PublicationService>();
 
         return services;
     }
