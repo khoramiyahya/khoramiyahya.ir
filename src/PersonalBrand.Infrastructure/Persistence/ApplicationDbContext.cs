@@ -6,6 +6,7 @@ using PersonalBrand.Domain.Contact;
 using PersonalBrand.Domain.Profiles;
 using PersonalBrand.Domain.Projects;
 using PersonalBrand.Domain.Services;
+using PersonalBrand.Domain.Skills;
 using PersonalBrand.Domain.Testimonials;
 using PersonalBrand.Infrastructure.Identity;
 
@@ -35,6 +36,8 @@ public sealed class ApplicationDbContext
     public DbSet<ServiceOffer> ServiceOffers => Set<ServiceOffer>();
 
     public DbSet<Testimonial> Testimonials => Set<Testimonial>();
+
+    public DbSet<Skill> Skills => Set<Skill>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

@@ -105,6 +105,11 @@ Useful endpoints:
 - My testimonials: `GET/POST /api/v1/testimonials/me`
 - Update/delete testimonial: `PUT/DELETE /api/v1/testimonials/me/{id}`
 - Publish/unpublish testimonial: `POST /api/v1/testimonials/me/{id}/publish|unpublish`
+- Public skills: `GET /api/v1/skills/public`
+- Public skill: `GET /api/v1/skills/public/{id}`
+- My skills: `GET/POST /api/v1/skills/me`
+- Update/delete skill: `PUT/DELETE /api/v1/skills/me/{id}`
+- Publish/unpublish skill: `POST /api/v1/skills/me/{id}/publish|unpublish`
 
 
 ## Apply EF Core migrations

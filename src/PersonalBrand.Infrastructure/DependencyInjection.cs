@@ -10,6 +10,7 @@ using PersonalBrand.Application.Contact;
 using PersonalBrand.Application.Profiles;
 using PersonalBrand.Application.Projects;
 using PersonalBrand.Application.Services;
+using PersonalBrand.Application.Skills;
 using PersonalBrand.Application.Testimonials;
 using PersonalBrand.Infrastructure.Auth;
 using PersonalBrand.Infrastructure.Blog;
@@ -21,6 +22,7 @@ using PersonalBrand.Infrastructure.Profiles;
 using PersonalBrand.Infrastructure.Projects;
 using PersonalBrand.Infrastructure.Services;
 using PersonalBrand.Infrastructure.ServicesCatalog;
+using PersonalBrand.Infrastructure.Skills;
 using PersonalBrand.Infrastructure.Storage;
 using PersonalBrand.Infrastructure.Testimonials;
 
@@ -82,6 +84,7 @@ public static class DependencyInjection
         services.AddScoped<IContactService, ContactService>();
         services.AddScoped<IServiceOfferService, ServiceOfferService>();
         services.AddScoped<ITestimonialService, TestimonialService>();
+        services.AddScoped<ISkillService, SkillService>();
 
         return services;
     }
