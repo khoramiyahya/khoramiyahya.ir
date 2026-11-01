@@ -160,6 +160,7 @@ Useful endpoints:
 - My redirects: `GET/POST /api/v1/redirects/me`
 - Update/delete redirect: `PUT/DELETE /api/v1/redirects/me/{id}`
 - Publish/unpublish redirect: `POST /api/v1/redirects/me/{id}/publish|unpublish`
+- Site search: `GET /api/v1/search?q=keyword&contentType=blog&limit=20`
 
 
 ## Apply EF Core migrations
