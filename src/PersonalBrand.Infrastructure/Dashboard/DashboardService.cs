@@ -106,6 +106,11 @@ internal sealed class DashboardService : IDashboardService
             item => item.UserId == userId && item.IsPublished,
             cancellationToken);
 
+        var partnersTotal = await _dbContext.Partners.CountAsync(item => item.UserId == userId, cancellationToken);
+        var partnersPublished = await _dbContext.Partners.CountAsync(
+            item => item.UserId == userId && item.IsPublished,
+            cancellationToken);
+
         var hasPublishedProfile = await _dbContext.BrandProfiles.AnyAsync(
             profile => profile.UserId == userId && profile.IsPublished,
             cancellationToken);
@@ -145,6 +150,8 @@ internal sealed class DashboardService : IDashboardService
             RedirectsPublished = redirectsPublished,
             RobotsRulesTotal = robotsTotal,
             RobotsRulesPublished = robotsPublished,
+            PartnersTotal = partnersTotal,
+            PartnersPublished = partnersPublished,
             HasPublishedProfile = hasPublishedProfile,
             GeneratedAtUtc = _dateTimeProvider.UtcNow
         };

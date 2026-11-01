@@ -11,6 +11,7 @@ using PersonalBrand.Domain.Media;
 using PersonalBrand.Domain.Navigation;
 using PersonalBrand.Domain.Newsletter;
 using PersonalBrand.Domain.Pages;
+using PersonalBrand.Domain.Partners;
 using PersonalBrand.Domain.Profiles;
 using PersonalBrand.Domain.Projects;
 using PersonalBrand.Domain.Redirects;
@@ -74,6 +75,8 @@ public sealed class ApplicationDbContext
     public DbSet<SeoRedirect> SeoRedirects => Set<SeoRedirect>();
 
     public DbSet<RobotsRule> RobotsRules => Set<RobotsRule>();
+
+    public DbSet<Partner> Partners => Set<Partner>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

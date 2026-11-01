@@ -167,6 +167,11 @@ Useful endpoints:
 - My robots rules: `GET/POST /api/v1/robots/me`
 - Update/delete robots rule: `PUT/DELETE /api/v1/robots/me/{id}`
 - Publish/unpublish robots rule: `POST /api/v1/robots/me/{id}/publish|unpublish`
+- Public partners: `GET /api/v1/partners/public`
+- Public partner: `GET /api/v1/partners/public/{id}`
+- My partners: `GET/POST /api/v1/partners/me`
+- Update/delete partner: `PUT/DELETE /api/v1/partners/me/{id}`
+- Publish/unpublish partner: `POST /api/v1/partners/me/{id}/publish|unpublish`
 
 
 ## Apply EF Core migrations
