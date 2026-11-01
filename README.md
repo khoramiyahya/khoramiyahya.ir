@@ -115,6 +115,11 @@ Useful endpoints:
 - My experience: `GET/POST /api/v1/experience/me`
 - Update/delete experience: `PUT/DELETE /api/v1/experience/me/{id}`
 - Publish/unpublish experience: `POST /api/v1/experience/me/{id}/publish|unpublish`
+- Public education: `GET /api/v1/education/public`
+- Public education item: `GET /api/v1/education/public/{id}`
+- My education: `GET/POST /api/v1/education/me`
+- Update/delete education: `PUT/DELETE /api/v1/education/me/{id}`
+- Publish/unpublish education: `POST /api/v1/education/me/{id}/publish|unpublish`
 
 
 ## Apply EF Core migrations
