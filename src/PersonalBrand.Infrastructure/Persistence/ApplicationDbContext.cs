@@ -8,6 +8,7 @@ using PersonalBrand.Domain.Education;
 using PersonalBrand.Domain.Experience;
 using PersonalBrand.Domain.Faq;
 using PersonalBrand.Domain.Media;
+using PersonalBrand.Domain.Navigation;
 using PersonalBrand.Domain.Newsletter;
 using PersonalBrand.Domain.Pages;
 using PersonalBrand.Domain.Profiles;
@@ -65,6 +66,8 @@ public sealed class ApplicationDbContext
     public DbSet<ContentPage> ContentPages => Set<ContentPage>();
 
     public DbSet<SocialLink> SocialLinks => Set<SocialLink>();
+
+    public DbSet<NavigationItem> NavigationItems => Set<NavigationItem>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

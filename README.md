@@ -150,6 +150,11 @@ Useful endpoints:
 - My social links: `GET/POST /api/v1/sociallinks/me`
 - Update/delete social link: `PUT/DELETE /api/v1/sociallinks/me/{id}`
 - Publish/unpublish social link: `POST /api/v1/sociallinks/me/{id}/publish|unpublish`
+- Public navigation: `GET /api/v1/navigation/public?location=header`
+- Public navigation item: `GET /api/v1/navigation/public/{id}`
+- My navigation: `GET/POST /api/v1/navigation/me`
+- Update/delete navigation: `PUT/DELETE /api/v1/navigation/me/{id}`
+- Publish/unpublish navigation: `POST /api/v1/navigation/me/{id}/publish|unpublish`
 
 
 ## Apply EF Core migrations

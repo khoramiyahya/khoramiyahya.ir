@@ -59,6 +59,10 @@ public sealed class DashboardSummaryDto
 
     public required int SocialLinksPublished { get; init; }
 
+    public required int NavigationItemsTotal { get; init; }
+
+    public required int NavigationItemsPublished { get; init; }
+
     public required bool HasPublishedProfile { get; init; }
 
     public required DateTimeOffset GeneratedAtUtc { get; init; }

@@ -91,6 +91,11 @@ internal sealed class DashboardService : IDashboardService
             item => item.UserId == userId && item.IsPublished,
             cancellationToken);
 
+        var navigationTotal = await _dbContext.NavigationItems.CountAsync(item => item.UserId == userId, cancellationToken);
+        var navigationPublished = await _dbContext.NavigationItems.CountAsync(
+            item => item.UserId == userId && item.IsPublished,
+            cancellationToken);
+
         var hasPublishedProfile = await _dbContext.BrandProfiles.AnyAsync(
             profile => profile.UserId == userId && profile.IsPublished,
             cancellationToken);
@@ -124,6 +129,8 @@ internal sealed class DashboardService : IDashboardService
             PagesPublished = pagesPublished,
             SocialLinksTotal = socialLinksTotal,
             SocialLinksPublished = socialLinksPublished,
+            NavigationItemsTotal = navigationTotal,
+            NavigationItemsPublished = navigationPublished,
             HasPublishedProfile = hasPublishedProfile,
             GeneratedAtUtc = _dateTimeProvider.UtcNow
         };

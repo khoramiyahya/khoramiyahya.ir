@@ -13,6 +13,7 @@ using PersonalBrand.Application.Education;
 using PersonalBrand.Application.Experience;
 using PersonalBrand.Application.Faq;
 using PersonalBrand.Application.Media;
+using PersonalBrand.Application.Navigation;
 using PersonalBrand.Application.Newsletter;
 using PersonalBrand.Application.Pages;
 using PersonalBrand.Application.Profiles;
@@ -32,6 +33,7 @@ using PersonalBrand.Infrastructure.Experience;
 using PersonalBrand.Infrastructure.Faq;
 using PersonalBrand.Infrastructure.Identity;
 using PersonalBrand.Infrastructure.Media;
+using PersonalBrand.Infrastructure.Navigation;
 using PersonalBrand.Infrastructure.Newsletter;
 using PersonalBrand.Infrastructure.Pages;
 using PersonalBrand.Infrastructure.Settings;
@@ -115,6 +117,7 @@ public static class DependencyInjection
         services.AddScoped<IMediaService, MediaService>();
         services.AddScoped<IPageService, PageService>();
         services.AddScoped<ISocialLinkService, SocialLinkService>();
+        services.AddScoped<INavigationService, NavigationService>();
 
         return services;
     }
