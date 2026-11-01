@@ -100,6 +100,11 @@ Useful endpoints:
 - My services: `GET/POST /api/v1/services/me`
 - Update/delete service: `PUT/DELETE /api/v1/services/me/{id}`
 - Publish/unpublish service: `POST /api/v1/services/me/{id}/publish|unpublish`
+- Public testimonials: `GET /api/v1/testimonials/public`
+- Public testimonial: `GET /api/v1/testimonials/public/{id}`
+- My testimonials: `GET/POST /api/v1/testimonials/me`
+- Update/delete testimonial: `PUT/DELETE /api/v1/testimonials/me/{id}`
+- Publish/unpublish testimonial: `POST /api/v1/testimonials/me/{id}/publish|unpublish`
 
 
 ## Apply EF Core migrations
