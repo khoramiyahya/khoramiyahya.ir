@@ -90,6 +90,11 @@ Useful endpoints:
 - Upload blog cover: `POST /api/v1/blog/me/{id}/cover` (multipart `file`)
 - Remove blog cover: `DELETE /api/v1/blog/me/{id}/cover`
 - Publish/unpublish blog post: `POST /api/v1/blog/me/{id}/publish|unpublish`
+- Submit contact form: `POST /api/v1/contact`
+- Contact inbox: `GET /api/v1/contact/inbox?unreadOnly=false`
+- Contact message: `GET /api/v1/contact/inbox/{id}`
+- Mark contact read/unread: `POST /api/v1/contact/inbox/{id}/read|unread`
+- Delete contact message: `DELETE /api/v1/contact/inbox/{id}`
 
 
 ## Apply EF Core migrations

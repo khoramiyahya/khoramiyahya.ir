@@ -6,10 +6,12 @@ using Microsoft.Extensions.DependencyInjection;
 using PersonalBrand.Application.Abstractions;
 using PersonalBrand.Application.Auth;
 using PersonalBrand.Application.Blog;
+using PersonalBrand.Application.Contact;
 using PersonalBrand.Application.Profiles;
 using PersonalBrand.Application.Projects;
 using PersonalBrand.Infrastructure.Auth;
 using PersonalBrand.Infrastructure.Blog;
+using PersonalBrand.Infrastructure.Contact;
 using PersonalBrand.Infrastructure.Identity;
 using PersonalBrand.Infrastructure.Options;
 using PersonalBrand.Infrastructure.Persistence;
@@ -73,6 +75,7 @@ public static class DependencyInjection
         services.AddScoped<IProfileService, ProfileService>();
         services.AddScoped<IProjectService, ProjectService>();
         services.AddScoped<IBlogService, BlogService>();
+        services.AddScoped<IContactService, ContactService>();
 
         return services;
     }
