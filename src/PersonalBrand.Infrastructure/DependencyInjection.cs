@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PersonalBrand.Application.Abstractions;
 using PersonalBrand.Application.Auth;
 using PersonalBrand.Application.Blog;
+using PersonalBrand.Application.Certifications;
 using PersonalBrand.Application.Contact;
 using PersonalBrand.Application.Education;
 using PersonalBrand.Application.Experience;
@@ -17,6 +18,7 @@ using PersonalBrand.Application.Skills;
 using PersonalBrand.Application.Testimonials;
 using PersonalBrand.Infrastructure.Auth;
 using PersonalBrand.Infrastructure.Blog;
+using PersonalBrand.Infrastructure.Certifications;
 using PersonalBrand.Infrastructure.Contact;
 using PersonalBrand.Infrastructure.Education;
 using PersonalBrand.Infrastructure.Experience;
@@ -94,6 +96,7 @@ public static class DependencyInjection
         services.AddScoped<IExperienceService, ExperienceService>();
         services.AddScoped<IEducationService, EducationService>();
         services.AddScoped<IFaqService, FaqService>();
+        services.AddScoped<ICertificationService, CertificationService>();
 
         return services;
     }

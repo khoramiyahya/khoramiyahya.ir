@@ -125,6 +125,11 @@ Useful endpoints:
 - My FAQ: `GET/POST /api/v1/faq/me`
 - Update/delete FAQ: `PUT/DELETE /api/v1/faq/me/{id}`
 - Publish/unpublish FAQ: `POST /api/v1/faq/me/{id}/publish|unpublish`
+- Public certifications: `GET /api/v1/certifications/public`
+- Public certification: `GET /api/v1/certifications/public/{id}`
+- My certifications: `GET/POST /api/v1/certifications/me`
+- Update/delete certification: `PUT/DELETE /api/v1/certifications/me/{id}`
+- Publish/unpublish certification: `POST /api/v1/certifications/me/{id}/publish|unpublish`
 
 
 ## Apply EF Core migrations

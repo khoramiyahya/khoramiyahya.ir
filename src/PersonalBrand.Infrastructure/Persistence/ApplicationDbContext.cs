@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 using PersonalBrand.Domain.Blog;
+using PersonalBrand.Domain.Certifications;
 using PersonalBrand.Domain.Contact;
 using PersonalBrand.Domain.Education;
 using PersonalBrand.Domain.Experience;
@@ -47,6 +48,8 @@ public sealed class ApplicationDbContext
     public DbSet<EducationEntry> EducationEntries => Set<EducationEntry>();
 
     public DbSet<FaqItem> FaqItems => Set<FaqItem>();
+
+    public DbSet<Certification> Certifications => Set<Certification>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
