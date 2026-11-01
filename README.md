@@ -155,6 +155,11 @@ Useful endpoints:
 - My navigation: `GET/POST /api/v1/navigation/me`
 - Update/delete navigation: `PUT/DELETE /api/v1/navigation/me/{id}`
 - Publish/unpublish navigation: `POST /api/v1/navigation/me/{id}/publish|unpublish`
+- Public redirects: `GET /api/v1/redirects/public`
+- Resolve redirect: `GET /api/v1/redirects/public/resolve?fromPath=/old-path`
+- My redirects: `GET/POST /api/v1/redirects/me`
+- Update/delete redirect: `PUT/DELETE /api/v1/redirects/me/{id}`
+- Publish/unpublish redirect: `POST /api/v1/redirects/me/{id}/publish|unpublish`
 
 
 ## Apply EF Core migrations

@@ -13,6 +13,7 @@ using PersonalBrand.Domain.Newsletter;
 using PersonalBrand.Domain.Pages;
 using PersonalBrand.Domain.Profiles;
 using PersonalBrand.Domain.Projects;
+using PersonalBrand.Domain.Redirects;
 using PersonalBrand.Domain.Services;
 using PersonalBrand.Domain.Settings;
 using PersonalBrand.Domain.Skills;
@@ -68,6 +69,8 @@ public sealed class ApplicationDbContext
     public DbSet<SocialLink> SocialLinks => Set<SocialLink>();
 
     public DbSet<NavigationItem> NavigationItems => Set<NavigationItem>();
+
+    public DbSet<SeoRedirect> SeoRedirects => Set<SeoRedirect>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

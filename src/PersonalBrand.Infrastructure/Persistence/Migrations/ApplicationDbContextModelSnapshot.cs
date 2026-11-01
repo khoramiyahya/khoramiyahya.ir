@@ -894,6 +894,55 @@ namespace PersonalBrand.Infrastructure.Persistence.Migrations
                     b.ToTable("PortfolioProjects", (string)null);
                 });
 
+            modelBuilder.Entity("PersonalBrand.Domain.Redirects.SeoRedirect", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("FromPath")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsPublished")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("StatusCode")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ToUrl")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTimeOffset>("UpdatedAtUtc")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FromPath")
+                        .IsUnique();
+
+                    b.HasIndex("IsPublished");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("SeoRedirects", (string)null);
+                });
+
             modelBuilder.Entity("PersonalBrand.Domain.Services.ServiceOffer", b =>
                 {
                     b.Property<Guid>("Id")
