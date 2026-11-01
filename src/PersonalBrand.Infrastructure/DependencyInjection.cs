@@ -9,6 +9,7 @@ using PersonalBrand.Application.Blog;
 using PersonalBrand.Application.Contact;
 using PersonalBrand.Application.Profiles;
 using PersonalBrand.Application.Projects;
+using PersonalBrand.Application.Services;
 using PersonalBrand.Infrastructure.Auth;
 using PersonalBrand.Infrastructure.Blog;
 using PersonalBrand.Infrastructure.Contact;
@@ -18,6 +19,7 @@ using PersonalBrand.Infrastructure.Persistence;
 using PersonalBrand.Infrastructure.Profiles;
 using PersonalBrand.Infrastructure.Projects;
 using PersonalBrand.Infrastructure.Services;
+using PersonalBrand.Infrastructure.ServicesCatalog;
 using PersonalBrand.Infrastructure.Storage;
 
 namespace PersonalBrand.Infrastructure;
@@ -76,6 +78,7 @@ public static class DependencyInjection
         services.AddScoped<IProjectService, ProjectService>();
         services.AddScoped<IBlogService, BlogService>();
         services.AddScoped<IContactService, ContactService>();
+        services.AddScoped<IServiceOfferService, ServiceOfferService>();
 
         return services;
     }

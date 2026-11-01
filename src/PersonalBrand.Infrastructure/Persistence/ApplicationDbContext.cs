@@ -5,6 +5,7 @@ using PersonalBrand.Domain.Blog;
 using PersonalBrand.Domain.Contact;
 using PersonalBrand.Domain.Profiles;
 using PersonalBrand.Domain.Projects;
+using PersonalBrand.Domain.Services;
 using PersonalBrand.Infrastructure.Identity;
 
 namespace PersonalBrand.Infrastructure.Persistence;
@@ -29,6 +30,8 @@ public sealed class ApplicationDbContext
     public DbSet<BlogPost> BlogPosts => Set<BlogPost>();
 
     public DbSet<ContactMessage> ContactMessages => Set<ContactMessage>();
+
+    public DbSet<ServiceOffer> ServiceOffers => Set<ServiceOffer>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

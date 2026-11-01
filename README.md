@@ -95,6 +95,11 @@ Useful endpoints:
 - Contact message: `GET /api/v1/contact/inbox/{id}`
 - Mark contact read/unread: `POST /api/v1/contact/inbox/{id}/read|unread`
 - Delete contact message: `DELETE /api/v1/contact/inbox/{id}`
+- Public services: `GET /api/v1/services/public`
+- Public service: `GET /api/v1/services/public/{slug}`
+- My services: `GET/POST /api/v1/services/me`
+- Update/delete service: `PUT/DELETE /api/v1/services/me/{id}`
+- Publish/unpublish service: `POST /api/v1/services/me/{id}/publish|unpublish`
 
 
 ## Apply EF Core migrations
