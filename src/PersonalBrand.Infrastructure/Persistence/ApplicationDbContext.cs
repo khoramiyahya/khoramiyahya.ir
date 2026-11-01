@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 using PersonalBrand.Domain.Profiles;
+using PersonalBrand.Domain.Projects;
 using PersonalBrand.Infrastructure.Identity;
 
 namespace PersonalBrand.Infrastructure.Persistence;
@@ -20,6 +21,8 @@ public sealed class ApplicationDbContext
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
     public DbSet<BrandProfile> BrandProfiles => Set<BrandProfile>();
+
+    public DbSet<PortfolioProject> PortfolioProjects => Set<PortfolioProject>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

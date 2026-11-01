@@ -1,4 +1,4 @@
-# Bertina Windows Shared Hosting (IIS)
+# Windows Shared Hosting (IIS)
 
 ## Must verify with the host
 

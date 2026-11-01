@@ -76,6 +76,11 @@ Useful endpoints:
 - Publish profile: `POST /api/v1/profiles/me/publish`
 - Public profile: `GET /api/v1/profiles/public/{slug}`
 - Avatar files: `/uploads/{relative-path}`
+- Public projects: `GET /api/v1/projects/public`
+- Public project: `GET /api/v1/projects/public/{slug}`
+- My projects: `GET/POST /api/v1/projects/me`
+- Update/delete project: `PUT/DELETE /api/v1/projects/me/{id}`
+
 
 ## Apply EF Core migrations
 
@@ -98,8 +103,8 @@ dotnet test
 
 ## Hosting constraint
 
-Production target is **Windows Shared Hosting (IIS) on Bertina**.
+Production target is **Windows Shared Hosting (IIS)**.
 
 Docker is not required for production. Verify .NET 10 Hosting Bundle support, SQL Server availability, IIS/AspNetCoreModuleV2 configuration, writable upload/log folders, and secret configuration before deployment.
 
-Details: [docs/deployment/BERTINA_IIS.md](docs/deployment/BERTINA_IIS.md)
+Details: [docs/deployment/IIS_SHARED_HOSTING.md](docs/deployment/IIS_SHARED_HOSTING.md)

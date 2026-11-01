@@ -76,7 +76,7 @@ WebAPI must not contain business rules.
 
 ## Hosting notes
 
-The production target is Windows Shared Hosting (IIS) on Bertina.
+The production target is Windows Shared Hosting (IIS).
 
 Required verification before go-live:
 
