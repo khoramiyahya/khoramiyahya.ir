@@ -8,6 +8,7 @@ using PersonalBrand.Application.Auth;
 using PersonalBrand.Application.Blog;
 using PersonalBrand.Application.Certifications;
 using PersonalBrand.Application.Contact;
+using PersonalBrand.Application.Dashboard;
 using PersonalBrand.Application.Education;
 using PersonalBrand.Application.Experience;
 using PersonalBrand.Application.Faq;
@@ -22,6 +23,7 @@ using PersonalBrand.Infrastructure.Auth;
 using PersonalBrand.Infrastructure.Blog;
 using PersonalBrand.Infrastructure.Certifications;
 using PersonalBrand.Infrastructure.Contact;
+using PersonalBrand.Infrastructure.Dashboard;
 using PersonalBrand.Infrastructure.Education;
 using PersonalBrand.Infrastructure.Experience;
 using PersonalBrand.Infrastructure.Faq;
@@ -103,6 +105,7 @@ public static class DependencyInjection
         services.AddScoped<ICertificationService, CertificationService>();
         services.AddScoped<INewsletterService, NewsletterService>();
         services.AddScoped<ISiteSettingsService, SiteSettingsService>();
+        services.AddScoped<IDashboardService, DashboardService>();
 
         return services;
     }
