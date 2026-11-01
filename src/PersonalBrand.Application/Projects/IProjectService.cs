@@ -22,4 +22,14 @@ public interface IProjectService
     Task<ProjectDto> PublishMineAsync(Guid projectId, CancellationToken cancellationToken = default);
 
     Task<ProjectDto> UnpublishMineAsync(Guid projectId, CancellationToken cancellationToken = default);
+
+    Task<ProjectDto> UploadCoverAsync(
+        Guid projectId,
+        Stream content,
+        string fileName,
+        string contentType,
+        long? contentLength,
+        CancellationToken cancellationToken = default);
+
+    Task<ProjectDto> RemoveCoverAsync(Guid projectId, CancellationToken cancellationToken = default);
 }

@@ -80,6 +80,16 @@ Useful endpoints:
 - Public project: `GET /api/v1/projects/public/{slug}`
 - My projects: `GET/POST /api/v1/projects/me`
 - Update/delete project: `PUT/DELETE /api/v1/projects/me/{id}`
+- Upload project cover: `POST /api/v1/projects/me/{id}/cover` (multipart `file`)
+- Remove project cover: `DELETE /api/v1/projects/me/{id}/cover`
+- Publish/unpublish project: `POST /api/v1/projects/me/{id}/publish|unpublish`
+- Public blog posts: `GET /api/v1/blog/public`
+- Public blog post: `GET /api/v1/blog/public/{slug}`
+- My blog posts: `GET/POST /api/v1/blog/me`
+- Update/delete blog post: `PUT/DELETE /api/v1/blog/me/{id}`
+- Upload blog cover: `POST /api/v1/blog/me/{id}/cover` (multipart `file`)
+- Remove blog cover: `DELETE /api/v1/blog/me/{id}/cover`
+- Publish/unpublish blog post: `POST /api/v1/blog/me/{id}/publish|unpublish`
 
 
 ## Apply EF Core migrations

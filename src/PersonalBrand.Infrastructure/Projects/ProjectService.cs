@@ -22,6 +22,7 @@ internal sealed class ProjectService : IProjectService
     private readonly ICurrentUserService _currentUserService;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IAuditLogger _auditLogger;
+    private readonly IFileStorage _fileStorage;
     private readonly FileStorageOptions _fileStorageOptions;
     private readonly IValidator<CreateProjectRequest> _createValidator;
     private readonly IValidator<UpdateProjectRequest> _updateValidator;
@@ -31,6 +32,7 @@ internal sealed class ProjectService : IProjectService
         ICurrentUserService currentUserService,
         IDateTimeProvider dateTimeProvider,
         IAuditLogger auditLogger,
+        IFileStorage fileStorage,
         IOptions<FileStorageOptions> fileStorageOptions,
         IValidator<CreateProjectRequest> createValidator,
         IValidator<UpdateProjectRequest> updateValidator)
@@ -39,6 +41,7 @@ internal sealed class ProjectService : IProjectService
         _currentUserService = currentUserService;
         _dateTimeProvider = dateTimeProvider;
         _auditLogger = auditLogger;
+        _fileStorage = fileStorage;
         _fileStorageOptions = fileStorageOptions.Value;
         _createValidator = createValidator;
         _updateValidator = updateValidator;
@@ -216,9 +219,15 @@ internal sealed class ProjectService : IProjectService
     {
         var userId = RequireCurrentUserId();
         var project = await GetOwnedProjectAsync(userId, projectId, cancellationToken);
+        var coverImagePath = project.CoverImagePath;
 
         _dbContext.PortfolioProjects.Remove(project);
         await _dbContext.SaveChangesAsync(cancellationToken);
+
+        if (!string.IsNullOrWhiteSpace(coverImagePath))
+        {
+            await _fileStorage.DeleteAsync(coverImagePath, cancellationToken);
+        }
 
         await _auditLogger.LogAsync(
             action: "project.delete",
@@ -271,6 +280,175 @@ internal sealed class ProjectService : IProjectService
             cancellationToken: cancellationToken);
 
         return Map(project);
+    }
+
+    public async Task<ProjectDto> UploadCoverAsync(
+        Guid projectId,
+        Stream content,
+        string fileName,
+        string contentType,
+        long? contentLength,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(content);
+
+        ValidateCover(fileName, contentType, contentLength);
+
+        var userId = RequireCurrentUserId();
+        var project = await GetOwnedProjectAsync(userId, projectId, cancellationToken);
+        var previousCoverPath = project.CoverImagePath;
+
+        await using var limitedStream = await CopyToLimitedMemoryStreamAsync(
+            content,
+            _fileStorageOptions.CoverMaxBytes,
+            cancellationToken);
+
+        var storedPath = await _fileStorage.SaveAsync(
+            limitedStream,
+            fileName,
+            contentType,
+            cancellationToken);
+
+        try
+        {
+            project.SetCoverImage(storedPath, _dateTimeProvider.UtcNow);
+        }
+        catch (DomainException exception)
+        {
+            await _fileStorage.DeleteAsync(storedPath, cancellationToken);
+            throw new AppValidationException(new Dictionary<string, string[]>
+            {
+                ["Cover"] = [exception.Message]
+            });
+        }
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        if (!string.IsNullOrWhiteSpace(previousCoverPath)
+            && !string.Equals(previousCoverPath, storedPath, StringComparison.OrdinalIgnoreCase))
+        {
+            await _fileStorage.DeleteAsync(previousCoverPath, cancellationToken);
+        }
+
+        await _auditLogger.LogAsync(
+            action: "project.cover.upload",
+            entityName: nameof(PortfolioProject),
+            entityId: project.Id.ToString(),
+            cancellationToken: cancellationToken);
+
+        return Map(project);
+    }
+
+    public async Task<ProjectDto> RemoveCoverAsync(
+        Guid projectId,
+        CancellationToken cancellationToken = default)
+    {
+        var userId = RequireCurrentUserId();
+        var project = await GetOwnedProjectAsync(userId, projectId, cancellationToken);
+        var previousCoverPath = project.CoverImagePath;
+
+        project.SetCoverImage(null, _dateTimeProvider.UtcNow);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        if (!string.IsNullOrWhiteSpace(previousCoverPath))
+        {
+            await _fileStorage.DeleteAsync(previousCoverPath, cancellationToken);
+        }
+
+        await _auditLogger.LogAsync(
+            action: "project.cover.remove",
+            entityName: nameof(PortfolioProject),
+            entityId: project.Id.ToString(),
+            cancellationToken: cancellationToken);
+
+        return Map(project);
+    }
+
+    private void ValidateCover(string fileName, string contentType, long? contentLength)
+    {
+        if (string.IsNullOrWhiteSpace(fileName))
+        {
+            throw new AppValidationException(new Dictionary<string, string[]>
+            {
+                ["file"] = ["Cover file name is required."]
+            });
+        }
+
+        if (contentLength is > 0 && contentLength > _fileStorageOptions.CoverMaxBytes)
+        {
+            throw new AppValidationException(new Dictionary<string, string[]>
+            {
+                ["file"] = [$"Cover must be at most {_fileStorageOptions.CoverMaxBytes / 1024 / 1024} MB."]
+            });
+        }
+
+        var extension = Path.GetExtension(fileName);
+        if (string.IsNullOrWhiteSpace(extension)
+            || !_fileStorageOptions.AllowedCoverExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase))
+        {
+            throw new AppValidationException(new Dictionary<string, string[]>
+            {
+                ["file"] =
+                [
+                    $"Cover extension is not allowed. Allowed: {string.Join(", ", _fileStorageOptions.AllowedCoverExtensions)}"
+                ]
+            });
+        }
+
+        if (string.IsNullOrWhiteSpace(contentType)
+            || !_fileStorageOptions.AllowedCoverContentTypes.Contains(contentType, StringComparer.OrdinalIgnoreCase))
+        {
+            throw new AppValidationException(new Dictionary<string, string[]>
+            {
+                ["file"] =
+                [
+                    $"Cover content type is not allowed. Allowed: {string.Join(", ", _fileStorageOptions.AllowedCoverContentTypes)}"
+                ]
+            });
+        }
+    }
+
+    private static async Task<MemoryStream> CopyToLimitedMemoryStreamAsync(
+        Stream content,
+        long maxBytes,
+        CancellationToken cancellationToken)
+    {
+        var memoryStream = new MemoryStream();
+        var buffer = new byte[81920];
+        long totalRead = 0;
+
+        while (true)
+        {
+            var read = await content.ReadAsync(buffer.AsMemory(0, buffer.Length), cancellationToken);
+            if (read == 0)
+            {
+                break;
+            }
+
+            totalRead += read;
+            if (totalRead > maxBytes)
+            {
+                await memoryStream.DisposeAsync();
+                throw new AppValidationException(new Dictionary<string, string[]>
+                {
+                    ["file"] = [$"Cover must be at most {maxBytes / 1024 / 1024} MB."]
+                });
+            }
+
+            await memoryStream.WriteAsync(buffer.AsMemory(0, read), cancellationToken);
+        }
+
+        if (totalRead == 0)
+        {
+            await memoryStream.DisposeAsync();
+            throw new AppValidationException(new Dictionary<string, string[]>
+            {
+                ["file"] = ["Cover file is empty."]
+            });
+        }
+
+        memoryStream.Position = 0;
+        return memoryStream;
     }
 
     private async Task EnsureUniqueSlugAsync(PortfolioProject project, CancellationToken cancellationToken)

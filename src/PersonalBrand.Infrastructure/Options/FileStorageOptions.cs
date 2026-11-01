@@ -1,7 +1,7 @@
 namespace PersonalBrand.Infrastructure.Options;
 
 /// <summary>
-/// Local file storage and avatar upload settings.
+/// Local file storage and image upload settings.
 /// </summary>
 public sealed class FileStorageOptions
 {
@@ -31,6 +31,28 @@ public sealed class FileStorageOptions
     ];
 
     public string[] AllowedAvatarExtensions { get; set; } =
+    [
+        ".jpg",
+        ".jpeg",
+        ".png",
+        ".webp",
+        ".gif"
+    ];
+
+    /// <summary>
+    /// Maximum project cover image size in bytes.
+    /// </summary>
+    public long CoverMaxBytes { get; set; } = 5 * 1024 * 1024;
+
+    public string[] AllowedCoverContentTypes { get; set; } =
+    [
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "image/gif"
+    ];
+
+    public string[] AllowedCoverExtensions { get; set; } =
     [
         ".jpg",
         ".jpeg",

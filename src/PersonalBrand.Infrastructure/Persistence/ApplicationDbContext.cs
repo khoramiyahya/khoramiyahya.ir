@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
+using PersonalBrand.Domain.Blog;
 using PersonalBrand.Domain.Profiles;
 using PersonalBrand.Domain.Projects;
 using PersonalBrand.Infrastructure.Identity;
@@ -23,6 +24,8 @@ public sealed class ApplicationDbContext
     public DbSet<BrandProfile> BrandProfiles => Set<BrandProfile>();
 
     public DbSet<PortfolioProject> PortfolioProjects => Set<PortfolioProject>();
+
+    public DbSet<BlogPost> BlogPosts => Set<BlogPost>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
