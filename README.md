@@ -110,6 +110,11 @@ Useful endpoints:
 - My skills: `GET/POST /api/v1/skills/me`
 - Update/delete skill: `PUT/DELETE /api/v1/skills/me/{id}`
 - Publish/unpublish skill: `POST /api/v1/skills/me/{id}/publish|unpublish`
+- Public experience: `GET /api/v1/experience/public`
+- Public experience item: `GET /api/v1/experience/public/{id}`
+- My experience: `GET/POST /api/v1/experience/me`
+- Update/delete experience: `PUT/DELETE /api/v1/experience/me/{id}`
+- Publish/unpublish experience: `POST /api/v1/experience/me/{id}/publish|unpublish`
 
 
 ## Apply EF Core migrations

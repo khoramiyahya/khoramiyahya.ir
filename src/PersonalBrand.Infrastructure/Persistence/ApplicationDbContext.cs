@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 using PersonalBrand.Domain.Blog;
 using PersonalBrand.Domain.Contact;
+using PersonalBrand.Domain.Experience;
 using PersonalBrand.Domain.Profiles;
 using PersonalBrand.Domain.Projects;
 using PersonalBrand.Domain.Services;
@@ -38,6 +39,8 @@ public sealed class ApplicationDbContext
     public DbSet<Testimonial> Testimonials => Set<Testimonial>();
 
     public DbSet<Skill> Skills => Set<Skill>();
+
+    public DbSet<WorkExperience> WorkExperiences => Set<WorkExperience>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
