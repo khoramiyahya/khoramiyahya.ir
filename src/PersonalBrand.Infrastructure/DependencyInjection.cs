@@ -13,6 +13,7 @@ using PersonalBrand.Application.Dashboard;
 using PersonalBrand.Application.Education;
 using PersonalBrand.Application.Experience;
 using PersonalBrand.Application.Faq;
+using PersonalBrand.Application.Languages;
 using PersonalBrand.Application.Media;
 using PersonalBrand.Application.Navigation;
 using PersonalBrand.Application.Newsletter;
@@ -41,6 +42,7 @@ using PersonalBrand.Infrastructure.Education;
 using PersonalBrand.Infrastructure.Experience;
 using PersonalBrand.Infrastructure.Faq;
 using PersonalBrand.Infrastructure.Identity;
+using PersonalBrand.Infrastructure.Languages;
 using PersonalBrand.Infrastructure.Media;
 using PersonalBrand.Infrastructure.Navigation;
 using PersonalBrand.Infrastructure.Newsletter;
@@ -142,6 +144,7 @@ public static class DependencyInjection
         services.AddScoped<IAwardService, AwardService>();
         services.AddScoped<ITalkService, TalkService>();
         services.AddScoped<IPublicationService, PublicationService>();
+        services.AddScoped<ILanguageService, LanguageService>();
 
         return services;
     }

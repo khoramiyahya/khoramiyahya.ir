@@ -126,6 +126,11 @@ internal sealed class DashboardService : IDashboardService
             item => item.UserId == userId && item.IsPublished,
             cancellationToken);
 
+        var languagesTotal = await _dbContext.SpokenLanguages.CountAsync(item => item.UserId == userId, cancellationToken);
+        var languagesPublished = await _dbContext.SpokenLanguages.CountAsync(
+            item => item.UserId == userId && item.IsPublished,
+            cancellationToken);
+
         var hasPublishedProfile = await _dbContext.BrandProfiles.AnyAsync(
             profile => profile.UserId == userId && profile.IsPublished,
             cancellationToken);
@@ -173,6 +178,8 @@ internal sealed class DashboardService : IDashboardService
             TalksPublished = talksPublished,
             PublicationsTotal = publicationsTotal,
             PublicationsPublished = publicationsPublished,
+            LanguagesTotal = languagesTotal,
+            LanguagesPublished = languagesPublished,
             HasPublishedProfile = hasPublishedProfile,
             GeneratedAtUtc = _dateTimeProvider.UtcNow
         };

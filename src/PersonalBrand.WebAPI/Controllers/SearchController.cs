@@ -25,7 +25,7 @@ public sealed class SearchController : ControllerBase
     }
 
     /// <summary>
-    /// Searches published content across projects, blog, services, pages, FAQ, skills, certifications, experience, education, awards, talks, and publications.
+    /// Searches published content across projects, blog, services, pages, FAQ, skills, certifications, experience, education, awards, talks, publications, and languages.
     /// </summary>
     [HttpGet]
     [AllowAnonymous]

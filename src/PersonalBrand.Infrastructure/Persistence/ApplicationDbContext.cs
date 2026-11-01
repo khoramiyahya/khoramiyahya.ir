@@ -8,6 +8,7 @@ using PersonalBrand.Domain.Contact;
 using PersonalBrand.Domain.Education;
 using PersonalBrand.Domain.Experience;
 using PersonalBrand.Domain.Faq;
+using PersonalBrand.Domain.Languages;
 using PersonalBrand.Domain.Media;
 using PersonalBrand.Domain.Navigation;
 using PersonalBrand.Domain.Newsletter;
@@ -86,6 +87,8 @@ public sealed class ApplicationDbContext
     public DbSet<Talk> Talks => Set<Talk>();
 
     public DbSet<Publication> Publications => Set<Publication>();
+
+    public DbSet<SpokenLanguage> SpokenLanguages => Set<SpokenLanguage>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

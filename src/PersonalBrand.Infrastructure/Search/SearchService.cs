@@ -359,6 +359,31 @@ internal sealed class SearchService : ISearchService
             results.AddRange(publications);
         }
 
+        if (ShouldInclude(contentType, "language"))
+        {
+            var languages = await _dbContext.SpokenLanguages
+                .AsNoTracking()
+                .Where(item => item.IsPublished)
+                .Where(item =>
+                    item.Name.Contains(query)
+                    || item.Proficiency.Contains(query))
+                .OrderByDescending(item => item.UpdatedAtUtc)
+                .Take(limit)
+                .Select(item => new SearchResultItemDto
+                {
+                    Id = item.Id,
+                    ContentType = "language",
+                    Title = item.Name,
+                    Summary = item.Proficiency,
+                    Slug = null,
+                    UrlHint = $"/languages/{item.Id}",
+                    UpdatedAtUtc = item.UpdatedAtUtc
+                })
+                .ToListAsync(cancellationToken);
+
+            results.AddRange(languages);
+        }
+
         var ranked = results
             .OrderByDescending(item => item.UpdatedAtUtc)
             .Take(limit)

@@ -87,6 +87,10 @@ public sealed class DashboardSummaryDto
 
     public required int PublicationsPublished { get; init; }
 
+    public required int LanguagesTotal { get; init; }
+
+    public required int LanguagesPublished { get; init; }
+
     public required bool HasPublishedProfile { get; init; }
 
     public required DateTimeOffset GeneratedAtUtc { get; init; }

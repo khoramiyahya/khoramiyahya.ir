@@ -187,6 +187,11 @@ Useful endpoints:
 - My publications: `GET/POST /api/v1/publications/me`
 - Update/delete publication: `PUT/DELETE /api/v1/publications/me/{id}`
 - Publish/unpublish publication: `POST /api/v1/publications/me/{id}/publish|unpublish`
+- Public languages: `GET /api/v1/languages/public`
+- Public language: `GET /api/v1/languages/public/{id}`
+- My languages: `GET/POST /api/v1/languages/me`
+- Update/delete language: `PUT/DELETE /api/v1/languages/me/{id}`
+- Publish/unpublish language: `POST /api/v1/languages/me/{id}/publish|unpublish`
 
 
 ## Apply EF Core migrations

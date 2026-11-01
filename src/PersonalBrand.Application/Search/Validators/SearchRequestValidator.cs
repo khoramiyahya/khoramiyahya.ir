@@ -19,7 +19,8 @@ public sealed class SearchRequestValidator : AbstractValidator<SearchRequest>
         "education",
         "award",
         "talk",
-        "publication"
+        "publication",
+        "language"
     };
 
     public SearchRequestValidator()
