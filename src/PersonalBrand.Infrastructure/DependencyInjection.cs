@@ -11,6 +11,7 @@ using PersonalBrand.Application.Contact;
 using PersonalBrand.Application.Education;
 using PersonalBrand.Application.Experience;
 using PersonalBrand.Application.Faq;
+using PersonalBrand.Application.Newsletter;
 using PersonalBrand.Application.Profiles;
 using PersonalBrand.Application.Projects;
 using PersonalBrand.Application.Services;
@@ -24,6 +25,7 @@ using PersonalBrand.Infrastructure.Education;
 using PersonalBrand.Infrastructure.Experience;
 using PersonalBrand.Infrastructure.Faq;
 using PersonalBrand.Infrastructure.Identity;
+using PersonalBrand.Infrastructure.Newsletter;
 using PersonalBrand.Infrastructure.Options;
 using PersonalBrand.Infrastructure.Persistence;
 using PersonalBrand.Infrastructure.Profiles;
@@ -97,6 +99,7 @@ public static class DependencyInjection
         services.AddScoped<IEducationService, EducationService>();
         services.AddScoped<IFaqService, FaqService>();
         services.AddScoped<ICertificationService, CertificationService>();
+        services.AddScoped<INewsletterService, NewsletterService>();
 
         return services;
     }

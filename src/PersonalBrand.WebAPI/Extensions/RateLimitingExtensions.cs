@@ -13,6 +13,8 @@ internal static class RateLimitingExtensions
 
     public const string ContactPolicyName = "contact";
 
+    public const string NewsletterPolicyName = "newsletter";
+
     public static IServiceCollection AddConfiguredRateLimiting(
         this IServiceCollection services,
         IConfiguration configuration)
@@ -21,6 +23,8 @@ internal static class RateLimitingExtensions
         var windowSeconds = configuration.GetValue("RateLimiting:WindowSeconds", 60);
         var contactPermitLimit = configuration.GetValue("RateLimiting:ContactPermitLimit", 10);
         var contactWindowSeconds = configuration.GetValue("RateLimiting:ContactWindowSeconds", 60);
+        var newsletterPermitLimit = configuration.GetValue("RateLimiting:NewsletterPermitLimit", 10);
+        var newsletterWindowSeconds = configuration.GetValue("RateLimiting:NewsletterWindowSeconds", 60);
 
         services.AddRateLimiter(options =>
         {
@@ -36,6 +40,13 @@ internal static class RateLimitingExtensions
             {
                 limiterOptions.PermitLimit = contactPermitLimit;
                 limiterOptions.Window = TimeSpan.FromSeconds(contactWindowSeconds);
+                limiterOptions.QueueLimit = 0;
+            });
+
+            options.AddFixedWindowLimiter(NewsletterPolicyName, limiterOptions =>
+            {
+                limiterOptions.PermitLimit = newsletterPermitLimit;
+                limiterOptions.Window = TimeSpan.FromSeconds(newsletterWindowSeconds);
                 limiterOptions.QueueLimit = 0;
             });
         });

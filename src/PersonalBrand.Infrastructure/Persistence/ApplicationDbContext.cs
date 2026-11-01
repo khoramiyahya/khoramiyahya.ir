@@ -7,6 +7,7 @@ using PersonalBrand.Domain.Contact;
 using PersonalBrand.Domain.Education;
 using PersonalBrand.Domain.Experience;
 using PersonalBrand.Domain.Faq;
+using PersonalBrand.Domain.Newsletter;
 using PersonalBrand.Domain.Profiles;
 using PersonalBrand.Domain.Projects;
 using PersonalBrand.Domain.Services;
@@ -50,6 +51,8 @@ public sealed class ApplicationDbContext
     public DbSet<FaqItem> FaqItems => Set<FaqItem>();
 
     public DbSet<Certification> Certifications => Set<Certification>();
+
+    public DbSet<NewsletterSubscriber> NewsletterSubscribers => Set<NewsletterSubscriber>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

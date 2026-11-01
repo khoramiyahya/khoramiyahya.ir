@@ -130,6 +130,10 @@ Useful endpoints:
 - My certifications: `GET/POST /api/v1/certifications/me`
 - Update/delete certification: `PUT/DELETE /api/v1/certifications/me/{id}`
 - Publish/unpublish certification: `POST /api/v1/certifications/me/{id}/publish|unpublish`
+- Newsletter subscribe: `POST /api/v1/newsletter/subscribe`
+- Newsletter unsubscribe: `POST /api/v1/newsletter/unsubscribe`
+- Newsletter subscribers: `GET /api/v1/newsletter/subscribers?activeOnly=true`
+- Delete newsletter subscriber: `DELETE /api/v1/newsletter/subscribers/{id}`
 
 
 ## Apply EF Core migrations
