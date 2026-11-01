@@ -1,0 +1,6 @@
+@PersonalBrand.WebAPI_HostAddress = http://localhost:5153
+
+GET {{PersonalBrand.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

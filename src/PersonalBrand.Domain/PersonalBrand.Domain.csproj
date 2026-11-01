@@ -1,0 +1,8 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>PersonalBrand.Domain</RootNamespace>
+    <Description>Domain layer for Yahya KHorami Personal Brand Platform.</Description>
+  </PropertyGroup>
+
+</Project>

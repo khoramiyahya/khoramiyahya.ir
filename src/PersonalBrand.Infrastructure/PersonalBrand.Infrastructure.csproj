@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>PersonalBrand.Infrastructure</RootNamespace>
+    <Description>Infrastructure layer for Yahya KHorami Personal Brand Platform.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PersonalBrand.Application\PersonalBrand.Application.csproj" />
+    <ProjectReference Include="..\PersonalBrand.Domain\PersonalBrand.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

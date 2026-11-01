@@ -55,3 +55,29 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+# Visual Studio / Rider / VS Code
+.vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vscode/*
+
+# User secrets and local overrides
+**/appsettings.*.local.json
+**/secrets.json
+
+# Local NuGet package cache used when corporate feeds are unavailable
+.nuget-packages/
+
+# Uploads and runtime logs
+**/App_Data/
+**/logs/
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
