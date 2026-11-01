@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
+using PersonalBrand.Domain.Awards;
 using PersonalBrand.Domain.Blog;
 using PersonalBrand.Domain.Certifications;
 using PersonalBrand.Domain.Contact;
@@ -77,6 +78,8 @@ public sealed class ApplicationDbContext
     public DbSet<RobotsRule> RobotsRules => Set<RobotsRule>();
 
     public DbSet<Partner> Partners => Set<Partner>();
+
+    public DbSet<Award> Awards => Set<Award>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

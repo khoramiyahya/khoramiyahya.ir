@@ -140,6 +140,17 @@ internal sealed class SitemapService : ISitemapService
             Add($"/pages/{page.Slug}", page.UpdatedAtUtc, "monthly", 0.6m, "page");
         }
 
+        var awards = await _dbContext.Awards
+            .AsNoTracking()
+            .Where(item => item.IsPublished)
+            .Select(item => new { item.Id, item.UpdatedAtUtc })
+            .ToListAsync(cancellationToken);
+
+        foreach (var award in awards)
+        {
+            Add($"/awards/{award.Id}", award.UpdatedAtUtc, "yearly", 0.5m, "award");
+        }
+
         return entries
             .OrderByDescending(entry => entry.Priority)
             .ThenBy(entry => entry.Loc)

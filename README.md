@@ -172,6 +172,11 @@ Useful endpoints:
 - My partners: `GET/POST /api/v1/partners/me`
 - Update/delete partner: `PUT/DELETE /api/v1/partners/me/{id}`
 - Publish/unpublish partner: `POST /api/v1/partners/me/{id}/publish|unpublish`
+- Public awards: `GET /api/v1/awards/public`
+- Public award: `GET /api/v1/awards/public/{id}`
+- My awards: `GET/POST /api/v1/awards/me`
+- Update/delete award: `PUT/DELETE /api/v1/awards/me/{id}`
+- Publish/unpublish award: `POST /api/v1/awards/me/{id}/publish|unpublish`
 
 
 ## Apply EF Core migrations

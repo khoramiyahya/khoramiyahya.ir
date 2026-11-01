@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using PersonalBrand.Application.Abstractions;
 using PersonalBrand.Application.Auth;
+using PersonalBrand.Application.Awards;
 using PersonalBrand.Application.Blog;
 using PersonalBrand.Application.Certifications;
 using PersonalBrand.Application.Contact;
@@ -29,6 +30,7 @@ using PersonalBrand.Application.Skills;
 using PersonalBrand.Application.SocialLinks;
 using PersonalBrand.Application.Testimonials;
 using PersonalBrand.Infrastructure.Auth;
+using PersonalBrand.Infrastructure.Awards;
 using PersonalBrand.Infrastructure.Blog;
 using PersonalBrand.Infrastructure.Certifications;
 using PersonalBrand.Infrastructure.Contact;
@@ -133,6 +135,7 @@ public static class DependencyInjection
         services.AddScoped<ISitemapService, SitemapService>();
         services.AddScoped<IRobotsService, RobotsService>();
         services.AddScoped<IPartnerService, PartnerService>();
+        services.AddScoped<IAwardService, AwardService>();
 
         return services;
     }
