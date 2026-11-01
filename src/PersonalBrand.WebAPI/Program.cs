@@ -91,14 +91,19 @@ try
 
     app.Run();
 }
-catch (Exception exception) when (exception is not HostAbortedException)
+catch (HostAbortedException)
+{
+    // Expected when a design-time host is started and then stopped by tooling.
+    // With ApplicationDbContextFactory this path should rarely be hit.
+}
+catch (Exception exception)
 {
     Log.Fatal(exception, "Application terminated unexpectedly.");
     throw;
 }
 finally
 {
-    Log.CloseAndFlush();
+    await Log.CloseAndFlushAsync();
 }
 
 static async Task InitializeDatabaseAsync(WebApplication app)

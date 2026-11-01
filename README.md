@@ -70,6 +70,9 @@ Useful endpoints:
 - Auth refresh: `POST /api/v1/auth/refresh`
 - Auth revoke: `POST /api/v1/auth/revoke`
 - Current user: `GET /api/v1/auth/me` (Bearer token)
+- My profile: `GET/PUT /api/v1/profiles/me` (Bearer token)
+- Publish profile: `POST /api/v1/profiles/me/publish`
+- Public profile: `GET /api/v1/profiles/public/{slug}`
 
 ## Apply EF Core migrations
 

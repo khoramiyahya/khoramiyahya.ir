@@ -5,10 +5,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 using PersonalBrand.Application.Abstractions;
 using PersonalBrand.Application.Auth;
+using PersonalBrand.Application.Profiles;
 using PersonalBrand.Infrastructure.Auth;
 using PersonalBrand.Infrastructure.Identity;
 using PersonalBrand.Infrastructure.Options;
 using PersonalBrand.Infrastructure.Persistence;
+using PersonalBrand.Infrastructure.Profiles;
 using PersonalBrand.Infrastructure.Services;
 using PersonalBrand.Infrastructure.Storage;
 
@@ -64,6 +66,7 @@ public static class DependencyInjection
         services.AddScoped<IFileStorage, LocalFileStorage>();
         services.AddScoped<JwtTokenService>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IProfileService, ProfileService>();
 
         return services;
     }
