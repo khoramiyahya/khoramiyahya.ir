@@ -22,6 +22,7 @@ using PersonalBrand.Application.Redirects;
 using PersonalBrand.Application.Search;
 using PersonalBrand.Application.Services;
 using PersonalBrand.Application.Settings;
+using PersonalBrand.Application.Sitemap;
 using PersonalBrand.Application.Skills;
 using PersonalBrand.Application.SocialLinks;
 using PersonalBrand.Application.Testimonials;
@@ -47,6 +48,7 @@ using PersonalBrand.Infrastructure.Redirects;
 using PersonalBrand.Infrastructure.Search;
 using PersonalBrand.Infrastructure.Services;
 using PersonalBrand.Infrastructure.ServicesCatalog;
+using PersonalBrand.Infrastructure.Sitemap;
 using PersonalBrand.Infrastructure.Skills;
 using PersonalBrand.Infrastructure.SocialLinks;
 using PersonalBrand.Infrastructure.Storage;
@@ -124,6 +126,7 @@ public static class DependencyInjection
         services.AddScoped<INavigationService, NavigationService>();
         services.AddScoped<IRedirectService, RedirectService>();
         services.AddScoped<ISearchService, SearchService>();
+        services.AddScoped<ISitemapService, SitemapService>();
 
         return services;
     }
