@@ -81,6 +81,11 @@ internal sealed class DashboardService : IDashboardService
 
         var mediaTotal = await _dbContext.MediaAssets.CountAsync(item => item.UserId == userId, cancellationToken);
 
+        var pagesTotal = await _dbContext.ContentPages.CountAsync(item => item.UserId == userId, cancellationToken);
+        var pagesPublished = await _dbContext.ContentPages.CountAsync(
+            item => item.UserId == userId && item.IsPublished,
+            cancellationToken);
+
         var hasPublishedProfile = await _dbContext.BrandProfiles.AnyAsync(
             profile => profile.UserId == userId && profile.IsPublished,
             cancellationToken);
@@ -110,6 +115,8 @@ internal sealed class DashboardService : IDashboardService
             NewsletterSubscribersActive = newsletterActive,
             NewsletterSubscribersTotal = newsletterTotal,
             MediaAssetsTotal = mediaTotal,
+            PagesTotal = pagesTotal,
+            PagesPublished = pagesPublished,
             HasPublishedProfile = hasPublishedProfile,
             GeneratedAtUtc = _dateTimeProvider.UtcNow
         };

@@ -14,6 +14,7 @@ using PersonalBrand.Application.Experience;
 using PersonalBrand.Application.Faq;
 using PersonalBrand.Application.Media;
 using PersonalBrand.Application.Newsletter;
+using PersonalBrand.Application.Pages;
 using PersonalBrand.Application.Profiles;
 using PersonalBrand.Application.Projects;
 using PersonalBrand.Application.Services;
@@ -31,6 +32,7 @@ using PersonalBrand.Infrastructure.Faq;
 using PersonalBrand.Infrastructure.Identity;
 using PersonalBrand.Infrastructure.Media;
 using PersonalBrand.Infrastructure.Newsletter;
+using PersonalBrand.Infrastructure.Pages;
 using PersonalBrand.Infrastructure.Settings;
 using PersonalBrand.Infrastructure.Options;
 using PersonalBrand.Infrastructure.Persistence;
@@ -109,6 +111,7 @@ public static class DependencyInjection
         services.AddScoped<ISiteSettingsService, SiteSettingsService>();
         services.AddScoped<IDashboardService, DashboardService>();
         services.AddScoped<IMediaService, MediaService>();
+        services.AddScoped<IPageService, PageService>();
 
         return services;
     }

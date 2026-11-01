@@ -140,6 +140,11 @@ Useful endpoints:
 - My media: `GET/POST /api/v1/media/me`
 - Media item: `GET/PUT/DELETE /api/v1/media/me/{id}`
 - Upload media: `POST /api/v1/media/me` (multipart `file`, optional `title`, `altText`)
+- Public pages: `GET /api/v1/pages/public`
+- Public page: `GET /api/v1/pages/public/{slug}`
+- My pages: `GET/POST /api/v1/pages/me`
+- Update/delete page: `PUT/DELETE /api/v1/pages/me/{id}`
+- Publish/unpublish page: `POST /api/v1/pages/me/{id}/publish|unpublish`
 
 
 ## Apply EF Core migrations

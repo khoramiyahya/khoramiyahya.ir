@@ -9,6 +9,7 @@ using PersonalBrand.Domain.Experience;
 using PersonalBrand.Domain.Faq;
 using PersonalBrand.Domain.Media;
 using PersonalBrand.Domain.Newsletter;
+using PersonalBrand.Domain.Pages;
 using PersonalBrand.Domain.Profiles;
 using PersonalBrand.Domain.Projects;
 using PersonalBrand.Domain.Services;
@@ -59,6 +60,8 @@ public sealed class ApplicationDbContext
     public DbSet<SiteSettings> SiteSettings => Set<SiteSettings>();
 
     public DbSet<MediaAsset> MediaAssets => Set<MediaAsset>();
+
+    public DbSet<ContentPage> ContentPages => Set<ContentPage>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

@@ -51,6 +51,10 @@ public sealed class DashboardSummaryDto
 
     public required int MediaAssetsTotal { get; init; }
 
+    public required int PagesTotal { get; init; }
+
+    public required int PagesPublished { get; init; }
+
     public required bool HasPublishedProfile { get; init; }
 
     public required DateTimeOffset GeneratedAtUtc { get; init; }
