@@ -16,4 +16,13 @@ public interface IProfileService
     Task<ProfileDto> PublishMineAsync(CancellationToken cancellationToken = default);
 
     Task<ProfileDto> UnpublishMineAsync(CancellationToken cancellationToken = default);
+
+    Task<ProfileDto> UploadAvatarAsync(
+        Stream content,
+        string fileName,
+        string contentType,
+        long? contentLength,
+        CancellationToken cancellationToken = default);
+
+    Task<ProfileDto> RemoveAvatarAsync(CancellationToken cancellationToken = default);
 }

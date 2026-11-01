@@ -71,8 +71,11 @@ Useful endpoints:
 - Auth revoke: `POST /api/v1/auth/revoke`
 - Current user: `GET /api/v1/auth/me` (Bearer token)
 - My profile: `GET/PUT /api/v1/profiles/me` (Bearer token)
+- Upload avatar: `POST /api/v1/profiles/me/avatar` (multipart `file`)
+- Remove avatar: `DELETE /api/v1/profiles/me/avatar`
 - Publish profile: `POST /api/v1/profiles/me/publish`
 - Public profile: `GET /api/v1/profiles/public/{slug}`
+- Avatar files: `/uploads/{relative-path}`
 
 ## Apply EF Core migrations
 

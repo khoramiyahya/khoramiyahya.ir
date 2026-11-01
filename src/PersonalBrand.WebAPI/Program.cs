@@ -77,6 +77,7 @@ try
     }
 
     app.UseHttpsRedirection();
+    app.UseUploadStaticFiles();
     app.UseConfiguredCors();
     app.UseRateLimiter();
     app.UseAuthentication();

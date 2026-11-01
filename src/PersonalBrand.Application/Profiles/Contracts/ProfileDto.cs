@@ -15,7 +15,15 @@ public sealed class ProfileDto
 
     public string? Bio { get; init; }
 
+    /// <summary>
+    /// Storage-relative avatar path.
+    /// </summary>
     public string? AvatarPath { get; init; }
+
+    /// <summary>
+    /// Public URL for the avatar, when available.
+    /// </summary>
+    public string? AvatarUrl { get; init; }
 
     public string? Location { get; init; }
 

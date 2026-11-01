@@ -1,6 +1,7 @@
 using FluentValidation;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 using PersonalBrand.Application.Abstractions;
 using PersonalBrand.Application.Common.Exceptions;
@@ -9,6 +10,7 @@ using PersonalBrand.Application.Profiles;
 using PersonalBrand.Application.Profiles.Contracts;
 using PersonalBrand.Domain.Exceptions;
 using PersonalBrand.Domain.Profiles;
+using PersonalBrand.Infrastructure.Options;
 using PersonalBrand.Infrastructure.Persistence;
 
 namespace PersonalBrand.Infrastructure.Profiles;
@@ -19,6 +21,8 @@ internal sealed class ProfileService : IProfileService
     private readonly ICurrentUserService _currentUserService;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IAuditLogger _auditLogger;
+    private readonly IFileStorage _fileStorage;
+    private readonly FileStorageOptions _fileStorageOptions;
     private readonly IValidator<UpdateProfileRequest> _updateValidator;
 
     public ProfileService(
@@ -26,12 +30,16 @@ internal sealed class ProfileService : IProfileService
         ICurrentUserService currentUserService,
         IDateTimeProvider dateTimeProvider,
         IAuditLogger auditLogger,
+        IFileStorage fileStorage,
+        IOptions<FileStorageOptions> fileStorageOptions,
         IValidator<UpdateProfileRequest> updateValidator)
     {
         _dbContext = dbContext;
         _currentUserService = currentUserService;
         _dateTimeProvider = dateTimeProvider;
         _auditLogger = auditLogger;
+        _fileStorage = fileStorage;
+        _fileStorageOptions = fileStorageOptions.Value;
         _updateValidator = updateValidator;
     }
 
@@ -179,6 +187,172 @@ internal sealed class ProfileService : IProfileService
         return Map(profile);
     }
 
+    public async Task<ProfileDto> UploadAvatarAsync(
+        Stream content,
+        string fileName,
+        string contentType,
+        long? contentLength,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(content);
+
+        ValidateAvatar(fileName, contentType, contentLength);
+
+        var userId = RequireCurrentUserId();
+        var profile = await GetOrCreateMineAsync(userId, cancellationToken);
+        var previousAvatarPath = profile.AvatarPath;
+
+        await using var limitedStream = await CopyToLimitedMemoryStreamAsync(
+            content,
+            _fileStorageOptions.AvatarMaxBytes,
+            cancellationToken);
+
+        var storedPath = await _fileStorage.SaveAsync(
+            limitedStream,
+            fileName,
+            contentType,
+            cancellationToken);
+
+        try
+        {
+            profile.SetAvatar(storedPath, _dateTimeProvider.UtcNow);
+        }
+        catch (DomainException exception)
+        {
+            await _fileStorage.DeleteAsync(storedPath, cancellationToken);
+            throw new AppValidationException(new Dictionary<string, string[]>
+            {
+                ["Avatar"] = [exception.Message]
+            });
+        }
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        if (!string.IsNullOrWhiteSpace(previousAvatarPath)
+            && !string.Equals(previousAvatarPath, storedPath, StringComparison.OrdinalIgnoreCase))
+        {
+            await _fileStorage.DeleteAsync(previousAvatarPath, cancellationToken);
+        }
+
+        await _auditLogger.LogAsync(
+            action: "profile.avatar.upload",
+            entityName: nameof(BrandProfile),
+            entityId: profile.Id.ToString(),
+            cancellationToken: cancellationToken);
+
+        return Map(profile);
+    }
+
+    public async Task<ProfileDto> RemoveAvatarAsync(CancellationToken cancellationToken = default)
+    {
+        var userId = RequireCurrentUserId();
+        var profile = await GetOrCreateMineAsync(userId, cancellationToken);
+        var previousAvatarPath = profile.AvatarPath;
+
+        profile.SetAvatar(null, _dateTimeProvider.UtcNow);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        if (!string.IsNullOrWhiteSpace(previousAvatarPath))
+        {
+            await _fileStorage.DeleteAsync(previousAvatarPath, cancellationToken);
+        }
+
+        await _auditLogger.LogAsync(
+            action: "profile.avatar.remove",
+            entityName: nameof(BrandProfile),
+            entityId: profile.Id.ToString(),
+            cancellationToken: cancellationToken);
+
+        return Map(profile);
+    }
+
+    private void ValidateAvatar(string fileName, string contentType, long? contentLength)
+    {
+        if (string.IsNullOrWhiteSpace(fileName))
+        {
+            throw new AppValidationException(new Dictionary<string, string[]>
+            {
+                ["file"] = ["Avatar file name is required."]
+            });
+        }
+
+        if (contentLength is > 0 && contentLength > _fileStorageOptions.AvatarMaxBytes)
+        {
+            throw new AppValidationException(new Dictionary<string, string[]>
+            {
+                ["file"] = [$"Avatar must be at most {_fileStorageOptions.AvatarMaxBytes / 1024 / 1024} MB."]
+            });
+        }
+
+        var extension = Path.GetExtension(fileName);
+        if (string.IsNullOrWhiteSpace(extension)
+            || !_fileStorageOptions.AllowedAvatarExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase))
+        {
+            throw new AppValidationException(new Dictionary<string, string[]>
+            {
+                ["file"] =
+                [
+                    $"Avatar extension is not allowed. Allowed: {string.Join(", ", _fileStorageOptions.AllowedAvatarExtensions)}"
+                ]
+            });
+        }
+
+        if (string.IsNullOrWhiteSpace(contentType)
+            || !_fileStorageOptions.AllowedAvatarContentTypes.Contains(contentType, StringComparer.OrdinalIgnoreCase))
+        {
+            throw new AppValidationException(new Dictionary<string, string[]>
+            {
+                ["file"] =
+                [
+                    $"Avatar content type is not allowed. Allowed: {string.Join(", ", _fileStorageOptions.AllowedAvatarContentTypes)}"
+                ]
+            });
+        }
+    }
+
+    private static async Task<MemoryStream> CopyToLimitedMemoryStreamAsync(
+        Stream content,
+        long maxBytes,
+        CancellationToken cancellationToken)
+    {
+        var memoryStream = new MemoryStream();
+        var buffer = new byte[81920];
+        long totalRead = 0;
+
+        while (true)
+        {
+            var read = await content.ReadAsync(buffer.AsMemory(0, buffer.Length), cancellationToken);
+            if (read == 0)
+            {
+                break;
+            }
+
+            totalRead += read;
+            if (totalRead > maxBytes)
+            {
+                await memoryStream.DisposeAsync();
+                throw new AppValidationException(new Dictionary<string, string[]>
+                {
+                    ["file"] = [$"Avatar must be at most {maxBytes / 1024 / 1024} MB."]
+                });
+            }
+
+            await memoryStream.WriteAsync(buffer.AsMemory(0, read), cancellationToken);
+        }
+
+        if (totalRead == 0)
+        {
+            await memoryStream.DisposeAsync();
+            throw new AppValidationException(new Dictionary<string, string[]>
+            {
+                ["file"] = ["Avatar file is empty."]
+            });
+        }
+
+        memoryStream.Position = 0;
+        return memoryStream;
+    }
+
     private async Task<BrandProfile> GetOrCreateMineAsync(string userId, CancellationToken cancellationToken)
     {
         var existing = await _dbContext.BrandProfiles
@@ -269,8 +443,10 @@ internal sealed class ProfileService : IProfileService
         return _currentUserService.UserId;
     }
 
-    private static ProfileDto Map(BrandProfile profile) =>
-        new()
+    private ProfileDto Map(BrandProfile profile)
+    {
+        var requestPath = _fileStorageOptions.RequestPath.TrimEnd('/');
+        return new ProfileDto
         {
             Id = profile.Id,
             Slug = profile.Slug,
@@ -278,6 +454,9 @@ internal sealed class ProfileService : IProfileService
             Headline = profile.Headline,
             Bio = profile.Bio,
             AvatarPath = profile.AvatarPath,
+            AvatarUrl = string.IsNullOrWhiteSpace(profile.AvatarPath)
+                ? null
+                : $"{requestPath}/{profile.AvatarPath.TrimStart('/')}",
             Location = profile.Location,
             WebsiteUrl = profile.WebsiteUrl,
             LinkedInUrl = profile.LinkedInUrl,
@@ -287,4 +466,5 @@ internal sealed class ProfileService : IProfileService
             IsPublished = profile.IsPublished,
             UpdatedAtUtc = profile.UpdatedAtUtc
         };
+    }
 }

@@ -54,6 +54,50 @@ public sealed class ProfilesController : ControllerBase
     }
 
     /// <summary>
+    /// Uploads or replaces the current user's avatar image.
+    /// </summary>
+    [HttpPost("me/avatar")]
+    [Authorize]
+    [RequestSizeLimit(3 * 1024 * 1024)]
+    [RequestFormLimits(MultipartBodyLengthLimit = 3 * 1024 * 1024)]
+    [Consumes("multipart/form-data")]
+    [ProducesResponseType(typeof(ApiResponse<ProfileDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ApiResponse<ProfileDto>>> UploadAvatar(
+        IFormFile file,
+        CancellationToken cancellationToken)
+    {
+        if (file is null || file.Length == 0)
+        {
+            return BadRequest(ApiResponse<object>.Fail(
+                "Avatar file is required.",
+                traceId: HttpContext.TraceIdentifier));
+        }
+
+        await using var stream = file.OpenReadStream();
+        var result = await _profileService.UploadAvatarAsync(
+            stream,
+            file.FileName,
+            file.ContentType,
+            file.Length,
+            cancellationToken);
+
+        return Ok(ApiResponse<ProfileDto>.Ok(result, traceId: HttpContext.TraceIdentifier));
+    }
+
+    /// <summary>
+    /// Removes the current user's avatar image.
+    /// </summary>
+    [HttpDelete("me/avatar")]
+    [Authorize]
+    [ProducesResponseType(typeof(ApiResponse<ProfileDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ApiResponse<ProfileDto>>> RemoveAvatar(CancellationToken cancellationToken)
+    {
+        var result = await _profileService.RemoveAvatarAsync(cancellationToken);
+        return Ok(ApiResponse<ProfileDto>.Ok(result, traceId: HttpContext.TraceIdentifier));
+    }
+
+    /// <summary>
     /// Publishes the current user's profile.
     /// </summary>
     [HttpPost("me/publish")]
@@ -92,4 +136,3 @@ public sealed class ProfilesController : ControllerBase
         return Ok(ApiResponse<ProfileDto>.Ok(result, traceId: HttpContext.TraceIdentifier));
     }
 }
-
