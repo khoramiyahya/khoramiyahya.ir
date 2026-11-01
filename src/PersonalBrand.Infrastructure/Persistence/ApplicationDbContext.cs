@@ -15,6 +15,7 @@ using PersonalBrand.Domain.Projects;
 using PersonalBrand.Domain.Services;
 using PersonalBrand.Domain.Settings;
 using PersonalBrand.Domain.Skills;
+using PersonalBrand.Domain.SocialLinks;
 using PersonalBrand.Domain.Testimonials;
 using PersonalBrand.Infrastructure.Identity;
 
@@ -62,6 +63,8 @@ public sealed class ApplicationDbContext
     public DbSet<MediaAsset> MediaAssets => Set<MediaAsset>();
 
     public DbSet<ContentPage> ContentPages => Set<ContentPage>();
+
+    public DbSet<SocialLink> SocialLinks => Set<SocialLink>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

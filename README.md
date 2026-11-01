@@ -145,6 +145,11 @@ Useful endpoints:
 - My pages: `GET/POST /api/v1/pages/me`
 - Update/delete page: `PUT/DELETE /api/v1/pages/me/{id}`
 - Publish/unpublish page: `POST /api/v1/pages/me/{id}/publish|unpublish`
+- Public social links: `GET /api/v1/sociallinks/public`
+- Public social link: `GET /api/v1/sociallinks/public/{id}`
+- My social links: `GET/POST /api/v1/sociallinks/me`
+- Update/delete social link: `PUT/DELETE /api/v1/sociallinks/me/{id}`
+- Publish/unpublish social link: `POST /api/v1/sociallinks/me/{id}/publish|unpublish`
 
 
 ## Apply EF Core migrations

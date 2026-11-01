@@ -20,6 +20,7 @@ using PersonalBrand.Application.Projects;
 using PersonalBrand.Application.Services;
 using PersonalBrand.Application.Settings;
 using PersonalBrand.Application.Skills;
+using PersonalBrand.Application.SocialLinks;
 using PersonalBrand.Application.Testimonials;
 using PersonalBrand.Infrastructure.Auth;
 using PersonalBrand.Infrastructure.Blog;
@@ -41,6 +42,7 @@ using PersonalBrand.Infrastructure.Projects;
 using PersonalBrand.Infrastructure.Services;
 using PersonalBrand.Infrastructure.ServicesCatalog;
 using PersonalBrand.Infrastructure.Skills;
+using PersonalBrand.Infrastructure.SocialLinks;
 using PersonalBrand.Infrastructure.Storage;
 using PersonalBrand.Infrastructure.Testimonials;
 
@@ -112,6 +114,7 @@ public static class DependencyInjection
         services.AddScoped<IDashboardService, DashboardService>();
         services.AddScoped<IMediaService, MediaService>();
         services.AddScoped<IPageService, PageService>();
+        services.AddScoped<ISocialLinkService, SocialLinkService>();
 
         return services;
     }
