@@ -18,6 +18,7 @@ public sealed class PersonalBrandWebApplicationFactory : WebApplicationFactory<P
         builder.UseSetting("Jwt:Audience", "PersonalBrandPlatform.Clients.Test");
         builder.UseSetting("Jwt:SigningKey", "TEST_ONLY_SIGNING_KEY_MUST_BE_AT_LEAST_32_CHARS");
         builder.UseSetting("Jwt:AccessTokenExpirationMinutes", "30");
+        builder.UseSetting("Jwt:RefreshTokenExpirationDays", "7");
         builder.UseSetting("Cors:AllowedOrigins:0", "http://localhost:5173");
         builder.UseSetting("Database:ApplyMigrationsOnStartup", "true");
         builder.UseSetting("BootstrapAdmin:Email", string.Empty);

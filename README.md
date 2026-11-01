@@ -67,6 +67,8 @@ Useful endpoints:
 - Health: `/health`
 - Auth register: `POST /api/v1/auth/register`
 - Auth login: `POST /api/v1/auth/login`
+- Auth refresh: `POST /api/v1/auth/refresh`
+- Auth revoke: `POST /api/v1/auth/revoke`
 - Current user: `GET /api/v1/auth/me` (Bearer token)
 
 ## Apply EF Core migrations

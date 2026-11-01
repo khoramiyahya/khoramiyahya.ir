@@ -10,7 +10,7 @@ using PersonalBrand.WebAPI.Contracts;
 namespace PersonalBrand.WebAPI.Controllers;
 
 /// <summary>
-/// Authentication endpoints for registration, login, and current-user profile.
+/// Authentication endpoints for registration, login, token refresh, and current-user profile.
 /// </summary>
 [ApiController]
 [ApiVersion("1.0")]
@@ -25,7 +25,7 @@ public sealed class AuthController : ControllerBase
     }
 
     /// <summary>
-    /// Registers a new user and returns a JWT access token.
+    /// Registers a new user and returns access/refresh tokens.
     /// </summary>
     [HttpPost("register")]
     [AllowAnonymous]
@@ -43,7 +43,7 @@ public sealed class AuthController : ControllerBase
     }
 
     /// <summary>
-    /// Authenticates a user and returns a JWT access token.
+    /// Authenticates a user and returns access/refresh tokens.
     /// </summary>
     [HttpPost("login")]
     [AllowAnonymous]
@@ -56,6 +56,35 @@ public sealed class AuthController : ControllerBase
     {
         var result = await _authService.LoginAsync(request, cancellationToken);
         return Ok(ApiResponse<AuthResponse>.Ok(result, traceId: HttpContext.TraceIdentifier));
+    }
+
+    /// <summary>
+    /// Exchanges a valid refresh token for a new access/refresh token pair.
+    /// </summary>
+    [HttpPost("refresh")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(ApiResponse<AuthResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<ApiResponse<AuthResponse>>> Refresh(
+        [FromBody] RefreshTokenRequest request,
+        CancellationToken cancellationToken)
+    {
+        var result = await _authService.RefreshAsync(request, cancellationToken);
+        return Ok(ApiResponse<AuthResponse>.Ok(result, traceId: HttpContext.TraceIdentifier));
+    }
+
+    /// <summary>
+    /// Revokes a refresh token (logout).
+    /// </summary>
+    [HttpPost("revoke")]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> Revoke(
+        [FromBody] RevokeTokenRequest request,
+        CancellationToken cancellationToken)
+    {
+        await _authService.RevokeAsync(request, cancellationToken);
+        return NoContent();
     }
 
     /// <summary>

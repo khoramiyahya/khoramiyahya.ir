@@ -24,7 +24,8 @@ public static class DependencyInjection
                 !string.IsNullOrWhiteSpace(options.Issuer)
                 && !string.IsNullOrWhiteSpace(options.Audience)
                 && !string.IsNullOrWhiteSpace(options.SigningKey)
-                && options.AccessTokenExpirationMinutes > 0,
+                && options.AccessTokenExpirationMinutes > 0
+                && options.RefreshTokenExpirationDays > 0,
                 "Jwt configuration is incomplete.")
             .ValidateOnStart();
 

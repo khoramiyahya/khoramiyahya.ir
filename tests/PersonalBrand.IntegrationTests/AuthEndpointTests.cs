@@ -38,6 +38,7 @@ public sealed class AuthEndpointTests : IClassFixture<PersonalBrandWebApplicatio
         Assert.NotNull(registerPayload);
         Assert.True(registerPayload.Success);
         Assert.False(string.IsNullOrWhiteSpace(registerPayload.Data?.AccessToken));
+        Assert.False(string.IsNullOrWhiteSpace(registerPayload.Data?.RefreshToken));
         Assert.Contains("Viewer", registerPayload.Data!.User.Roles);
 
         var loginResponse = await _client.PostAsJsonAsync("/api/v1/auth/login", new
@@ -50,6 +51,7 @@ public sealed class AuthEndpointTests : IClassFixture<PersonalBrandWebApplicatio
 
         var loginPayload = await loginResponse.Content.ReadFromJsonAsync<ApiEnvelope<AuthPayload>>(JsonOptions);
         Assert.NotNull(loginPayload?.Data?.AccessToken);
+        Assert.False(string.IsNullOrWhiteSpace(loginPayload.Data.RefreshToken));
 
         using var meRequest = new HttpRequestMessage(HttpMethod.Get, "/api/v1/auth/me");
         meRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", loginPayload!.Data!.AccessToken);
@@ -62,6 +64,76 @@ public sealed class AuthEndpointTests : IClassFixture<PersonalBrandWebApplicatio
         Assert.True(mePayload.Success);
         Assert.Equal(email, mePayload.Data?.Email);
         Assert.Equal("Test User", mePayload.Data?.DisplayName);
+    }
+
+    [Fact]
+    public async Task Refresh_Should_Rotate_Tokens_And_Reject_Reuse()
+    {
+        var email = $"user_{Guid.NewGuid():N}@example.com";
+        var password = "StrongPass1!";
+
+        var registerResponse = await _client.PostAsJsonAsync("/api/v1/auth/register", new
+        {
+            email,
+            password,
+            confirmPassword = password,
+            displayName = "Refresh User"
+        });
+
+        Assert.Equal(HttpStatusCode.Created, registerResponse.StatusCode);
+        var registerPayload = await registerResponse.Content.ReadFromJsonAsync<ApiEnvelope<AuthPayload>>(JsonOptions);
+        var originalRefreshToken = registerPayload!.Data!.RefreshToken;
+
+        var refreshResponse = await _client.PostAsJsonAsync("/api/v1/auth/refresh", new
+        {
+            refreshToken = originalRefreshToken
+        });
+
+        Assert.Equal(HttpStatusCode.OK, refreshResponse.StatusCode);
+        var refreshPayload = await refreshResponse.Content.ReadFromJsonAsync<ApiEnvelope<AuthPayload>>(JsonOptions);
+        Assert.NotNull(refreshPayload?.Data);
+        Assert.False(string.IsNullOrWhiteSpace(refreshPayload.Data.AccessToken));
+        Assert.False(string.IsNullOrWhiteSpace(refreshPayload.Data.RefreshToken));
+        Assert.NotEqual(originalRefreshToken, refreshPayload.Data.RefreshToken);
+
+        var reuseResponse = await _client.PostAsJsonAsync("/api/v1/auth/refresh", new
+        {
+            refreshToken = originalRefreshToken
+        });
+
+        Assert.Equal(HttpStatusCode.Unauthorized, reuseResponse.StatusCode);
+    }
+
+    [Fact]
+    public async Task Revoke_Should_Invalidate_Refresh_Token()
+    {
+        var email = $"user_{Guid.NewGuid():N}@example.com";
+        var password = "StrongPass1!";
+
+        var registerResponse = await _client.PostAsJsonAsync("/api/v1/auth/register", new
+        {
+            email,
+            password,
+            confirmPassword = password,
+            displayName = "Revoke User"
+        });
+
+        var registerPayload = await registerResponse.Content.ReadFromJsonAsync<ApiEnvelope<AuthPayload>>(JsonOptions);
+        var refreshToken = registerPayload!.Data!.RefreshToken;
+
+        var revokeResponse = await _client.PostAsJsonAsync("/api/v1/auth/revoke", new
+        {
+            refreshToken
+        });
+
+        Assert.Equal(HttpStatusCode.NoContent, revokeResponse.StatusCode);
+
+        var refreshResponse = await _client.PostAsJsonAsync("/api/v1/auth/refresh", new
+        {
+            refreshToken
+        });
+
+        Assert.Equal(HttpStatusCode.Unauthorized, refreshResponse.StatusCode);
     }
 
     [Fact]
@@ -101,6 +173,8 @@ public sealed class AuthEndpointTests : IClassFixture<PersonalBrandWebApplicatio
     private sealed class AuthPayload
     {
         public string AccessToken { get; set; } = string.Empty;
+
+        public string RefreshToken { get; set; } = string.Empty;
 
         public UserPayload User { get; set; } = new();
     }

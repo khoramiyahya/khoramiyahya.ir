@@ -112,6 +112,7 @@ static async Task InitializeDatabaseAsync(WebApplication app)
 
     if (applyMigrations)
     {
+        // MigrateAsync creates the database when it does not exist, then applies pending migrations.
         await dbContext.Database.MigrateAsync();
     }
 
