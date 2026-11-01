@@ -14,6 +14,7 @@ using PersonalBrand.Domain.Pages;
 using PersonalBrand.Domain.Profiles;
 using PersonalBrand.Domain.Projects;
 using PersonalBrand.Domain.Redirects;
+using PersonalBrand.Domain.Robots;
 using PersonalBrand.Domain.Services;
 using PersonalBrand.Domain.Settings;
 using PersonalBrand.Domain.Skills;
@@ -71,6 +72,8 @@ public sealed class ApplicationDbContext
     public DbSet<NavigationItem> NavigationItems => Set<NavigationItem>();
 
     public DbSet<SeoRedirect> SeoRedirects => Set<SeoRedirect>();
+
+    public DbSet<RobotsRule> RobotsRules => Set<RobotsRule>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

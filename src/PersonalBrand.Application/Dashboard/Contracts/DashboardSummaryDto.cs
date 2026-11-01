@@ -67,6 +67,10 @@ public sealed class DashboardSummaryDto
 
     public required int RedirectsPublished { get; init; }
 
+    public required int RobotsRulesTotal { get; init; }
+
+    public required int RobotsRulesPublished { get; init; }
+
     public required bool HasPublishedProfile { get; init; }
 
     public required DateTimeOffset GeneratedAtUtc { get; init; }

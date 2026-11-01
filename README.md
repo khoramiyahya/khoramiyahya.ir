@@ -163,6 +163,10 @@ Useful endpoints:
 - Site search: `GET /api/v1/search?q=keyword&contentType=blog&limit=20`
 - Sitemap JSON: `GET /api/v1/sitemap`
 - Sitemap XML: `GET /api/v1/sitemap/xml`
+- Public robots.txt: `GET /api/v1/robots/public`
+- My robots rules: `GET/POST /api/v1/robots/me`
+- Update/delete robots rule: `PUT/DELETE /api/v1/robots/me/{id}`
+- Publish/unpublish robots rule: `POST /api/v1/robots/me/{id}/publish|unpublish`
 
 
 ## Apply EF Core migrations
