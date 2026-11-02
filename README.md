@@ -192,6 +192,7 @@ Useful endpoints:
 - My languages: `GET/POST /api/v1/languages/me`
 - Update/delete language: `PUT/DELETE /api/v1/languages/me/{id}`
 - Publish/unpublish language: `POST /api/v1/languages/me/{id}/publish|unpublish`
+- Schema.org JSON-LD: `GET /api/v1/schema`
 
 
 ## Apply EF Core migrations

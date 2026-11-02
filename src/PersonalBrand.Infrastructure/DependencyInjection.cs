@@ -24,6 +24,7 @@ using PersonalBrand.Application.Projects;
 using PersonalBrand.Application.Publications;
 using PersonalBrand.Application.Redirects;
 using PersonalBrand.Application.Robots;
+using PersonalBrand.Application.Schema;
 using PersonalBrand.Application.Search;
 using PersonalBrand.Application.Services;
 using PersonalBrand.Application.Settings;
@@ -56,6 +57,7 @@ using PersonalBrand.Infrastructure.Projects;
 using PersonalBrand.Infrastructure.Publications;
 using PersonalBrand.Infrastructure.Redirects;
 using PersonalBrand.Infrastructure.Robots;
+using PersonalBrand.Infrastructure.Schema;
 using PersonalBrand.Infrastructure.Search;
 using PersonalBrand.Infrastructure.Services;
 using PersonalBrand.Infrastructure.ServicesCatalog;
@@ -145,6 +147,7 @@ public static class DependencyInjection
         services.AddScoped<ITalkService, TalkService>();
         services.AddScoped<IPublicationService, PublicationService>();
         services.AddScoped<ILanguageService, LanguageService>();
+        services.AddScoped<ISchemaService, SchemaService>();
 
         return services;
     }
