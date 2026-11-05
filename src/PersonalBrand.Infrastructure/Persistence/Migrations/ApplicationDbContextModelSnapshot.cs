@@ -1607,6 +1607,47 @@ namespace PersonalBrand.Infrastructure.Persistence.Migrations
                     b.ToTable("Testimonials", (string)null);
                 });
 
+            modelBuilder.Entity("PersonalBrand.Infrastructure.Auditing.AuditLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("EntityId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("EntityName")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("MetadataJson")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.Property<DateTimeOffset>("OccurredOnUtc")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("UserId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OccurredOnUtc");
+
+                    b.HasIndex("UserId", "OccurredOnUtc");
+
+                    b.HasIndex("EntityName", "EntityId", "OccurredOnUtc");
+
+                    b.ToTable("AuditLogs");
+                });
+
             modelBuilder.Entity("PersonalBrand.Infrastructure.Identity.ApplicationRole", b =>
                 {
                     b.Property<string>("Id")

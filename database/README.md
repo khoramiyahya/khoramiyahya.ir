@@ -14,18 +14,15 @@ This folder stores database-related artifacts that are useful outside of EF Core
 From the repository root:
 
 ```bash
-dotnet ef migrations add <MigrationName> \
-  --project src/PersonalBrand.Infrastructure \
-  --startup-project src/PersonalBrand.WebAPI \
-  --output-dir Persistence/Migrations
-
-dotnet ef database update \
-  --project src/PersonalBrand.Infrastructure \
-  --startup-project src/PersonalBrand.WebAPI
+dotnet tool restore
+dotnet ef migrations add <MigrationName> --project src/PersonalBrand.Infrastructure --startup-project src/PersonalBrand.WebAPI --output-dir Persistence/Migrations
+dotnet ef database update --project src/PersonalBrand.Infrastructure --startup-project src/PersonalBrand.WebAPI
 ```
 
-Install the EF Core tool if needed:
+Verify that the EF model matches the committed migrations:
 
 ```bash
-dotnet tool install --global dotnet-ef
+dotnet ef migrations has-pending-model-changes --project src/PersonalBrand.Infrastructure --startup-project src/PersonalBrand.WebAPI
 ```
+
+The repository pins `dotnet-ef` in `.config/dotnet-tools.json`; do not rely on a machine-global version.

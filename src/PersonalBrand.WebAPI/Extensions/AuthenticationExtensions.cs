@@ -18,7 +18,8 @@ internal static class AuthenticationExtensions
         var jwtOptions = configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>()
             ?? throw new InvalidOperationException("Jwt configuration section is missing.");
 
-        if (string.IsNullOrWhiteSpace(jwtOptions.SigningKey) || jwtOptions.SigningKey.Length < 32)
+        if (string.IsNullOrWhiteSpace(jwtOptions.SigningKey)
+            || Encoding.UTF8.GetByteCount(jwtOptions.SigningKey) < 32)
         {
             throw new InvalidOperationException(
                 "Jwt:SigningKey must be configured with a secret of at least 32 characters.");

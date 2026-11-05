@@ -35,6 +35,7 @@ Application depends only on Domain.
 - EF Core `ApplicationDbContext`
 - SQL Server configuration and migrations
 - ASP.NET Core Identity persistence
+- Durable database-backed audit records
 - File storage and other external integrations
 
 Infrastructure implements Application abstractions and may reference Domain for persistence mapping.
@@ -63,8 +64,11 @@ WebAPI must not contain business rules.
 
 - EF Core 10 is the only persistence ORM.
 - Schema evolves exclusively through EF Core migrations.
-- `ApplicationDbContext` currently hosts Identity entities and is ready for future business modules.
+- `ApplicationDbContext` hosts Identity and business-module entities, with mappings organized under `Persistence/Configurations`.
+- `AuditLogs` retain indexed actor, entity, action, timestamp, and bounded JSON metadata without a cascading user foreign key.
 - No generic repository is introduced by default. Prefer explicit application services and DbContext usage until a repository boundary becomes justified by a module.
+
+MVC controller actions run inside a shared EF Core transaction, so business saves and their explicit audit save commit or roll back together. Local writes are staged outside the public upload root, new files are placed before SQL commit, and destructive deletes are deferred until confirmed commit. An uncertain commit preserves both old and new files, favoring a removable orphan over a broken database reference. Request transactions intentionally disable automatic SQL retries to avoid replaying controller or file-system side effects. Non-HTTP callers and future storage providers must supply equivalent coordination.
 
 ## Authentication architecture
 

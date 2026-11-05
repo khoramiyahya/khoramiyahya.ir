@@ -12,18 +12,27 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: "10.0.x"
+
+      - name: Restore local tools
+        run: dotnet tool restore
+
+      - name: Verify EF Core tool
+        run: dotnet ef --version
 
       - name: Restore
         run: dotnet restore PersonalBrandPlatform.sln
 
       - name: Build
         run: dotnet build PersonalBrandPlatform.sln --configuration Release --no-restore
+
+      - name: Verify migration model
+        run: dotnet ef migrations has-pending-model-changes --project src/PersonalBrand.Infrastructure --startup-project src/PersonalBrand.WebAPI --configuration Release --no-build
 
       - name: Test
         run: dotnet test PersonalBrandPlatform.sln --configuration Release --no-build --verbosity normal

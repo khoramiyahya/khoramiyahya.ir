@@ -3,12 +3,14 @@
   <PropertyGroup>
     <RootNamespace>PersonalBrand.WebAPI</RootNamespace>
     <Description>HTTP API host for Yahya KHorami Personal Brand Platform.</Description>
+    <UserSecretsId>PersonalBrand.WebAPI-c20ac383-f273-4ff8-84dd-e671e0803e71</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Asp.Versioning.Mvc" />
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <PackageReference Include="Microsoft.Data.SqlClient" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -22,6 +24,10 @@
   <ItemGroup>
     <ProjectReference Include="..\PersonalBrand.Application\PersonalBrand.Application.csproj" />
     <ProjectReference Include="..\PersonalBrand.Infrastructure\PersonalBrand.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="PersonalBrand.UnitTests" />
   </ItemGroup>
 
 </Project>

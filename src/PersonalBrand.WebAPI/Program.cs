@@ -9,6 +9,7 @@ using PersonalBrand.Infrastructure;
 using PersonalBrand.Infrastructure.Identity;
 using PersonalBrand.Infrastructure.Persistence;
 using PersonalBrand.WebAPI.Extensions;
+using PersonalBrand.WebAPI.Filters;
 using PersonalBrand.WebAPI.Middleware;
 using PersonalBrand.WebAPI.Services;
 
@@ -29,6 +30,8 @@ try
             rollingInterval: RollingInterval.Day,
             retainedFileCountLimit: 14),
         preserveStaticLogger: true);
+
+    builder.Configuration.ValidateStartupConfiguration(builder.Environment);
 
     builder.Services.AddApplication();
     builder.Services.AddInfrastructure(builder.Configuration);
@@ -54,7 +57,9 @@ try
             options.SubstituteApiVersionInUrl = true;
         });
 
-    builder.Services.AddControllers();
+    builder.Services.AddScoped<DatabaseTransactionFilter>();
+    builder.Services.AddControllers(options =>
+        options.Filters.AddService<DatabaseTransactionFilter>());
     builder.Services.AddProblemDetails();
 
     builder.Services.AddHealthChecks()

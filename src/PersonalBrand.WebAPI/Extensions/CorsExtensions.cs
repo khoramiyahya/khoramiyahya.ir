@@ -15,6 +15,7 @@ internal static class CorsExtensions
     public static IApplicationBuilder UseConfiguredCors(this IApplicationBuilder app)
     {
         var corsOptions = app.ApplicationServices.GetRequiredService<IOptions<CorsOptions>>().Value;
+        var environment = app.ApplicationServices.GetRequiredService<IHostEnvironment>();
 
         return app.UseCors(policyBuilder =>
         {
@@ -28,7 +29,13 @@ internal static class CorsExtensions
                 return;
             }
 
-            // Fallback for local bootstrapping only. Production must configure Cors:AllowedOrigins.
+            if (!environment.IsDevelopment())
+            {
+                throw new InvalidOperationException(
+                    "Cors:AllowedOrigins must contain at least one origin outside Development.");
+            }
+
+            // An unrestricted fallback is permitted only for local development bootstrapping.
             policyBuilder
                 .AllowAnyOrigin()
                 .AllowAnyHeader()

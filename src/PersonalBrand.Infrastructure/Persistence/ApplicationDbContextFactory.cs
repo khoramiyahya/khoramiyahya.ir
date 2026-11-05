@@ -10,21 +10,34 @@ namespace PersonalBrand.Infrastructure.Persistence;
 /// </summary>
 public sealed class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
 {
+    private const string WebApiUserSecretsId = "PersonalBrand.WebAPI-c20ac383-f273-4ff8-84dd-e671e0803e71";
+
     public ApplicationDbContext CreateDbContext(string[] args)
     {
         var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
         var basePath = ResolveWebApiContentRoot();
 
-        var configuration = new ConfigurationBuilder()
+        var configurationBuilder = new ConfigurationBuilder()
             .SetBasePath(basePath)
             .AddJsonFile("appsettings.json", optional: false)
-            .AddJsonFile($"appsettings.{environment}.json", optional: true)
+            .AddJsonFile($"appsettings.{environment}.json", optional: true);
+
+        if (environment.Equals("Development", StringComparison.OrdinalIgnoreCase))
+        {
+            // Keep this ID aligned with PersonalBrand.WebAPI.csproj so EF tools use the same secrets as the host.
+            configurationBuilder.AddUserSecrets(WebApiUserSecretsId);
+        }
+
+        var configuration = configurationBuilder
             .AddEnvironmentVariables()
             .Build();
 
-        var connectionString = configuration.GetConnectionString("DefaultConnection")
-            ?? throw new InvalidOperationException(
-                "Connection string 'DefaultConnection' was not found for design-time DbContext creation.");
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        if (string.IsNullOrWhiteSpace(connectionString))
+        {
+            throw new InvalidOperationException(
+                "Connection string 'DefaultConnection' is required for design-time DbContext creation.");
+        }
 
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
         optionsBuilder.UseSqlServer(connectionString, sqlOptions =>

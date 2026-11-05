@@ -25,12 +25,13 @@ using PersonalBrand.Domain.Skills;
 using PersonalBrand.Domain.SocialLinks;
 using PersonalBrand.Domain.Talks;
 using PersonalBrand.Domain.Testimonials;
+using PersonalBrand.Infrastructure.Auditing;
 using PersonalBrand.Infrastructure.Identity;
 
 namespace PersonalBrand.Infrastructure.Persistence;
 
 /// <summary>
-/// EF Core database context for Identity and future business modules.
+/// EF Core database context for Identity, audit records, and business modules.
 /// </summary>
 public sealed class ApplicationDbContext
     : IdentityDbContext<ApplicationUser, ApplicationRole, string>
@@ -41,6 +42,8 @@ public sealed class ApplicationDbContext
     }
 
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+
+    public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
 
     public DbSet<BrandProfile> BrandProfiles => Set<BrandProfile>();
 

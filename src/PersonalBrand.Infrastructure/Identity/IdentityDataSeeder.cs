@@ -45,22 +45,39 @@ public static class IdentityDataSeeder
             logger.LogInformation("Seeded role {RoleName}", roleName);
         }
 
-        if (string.IsNullOrWhiteSpace(bootstrapOptions.Email)
-            || string.IsNullOrWhiteSpace(bootstrapOptions.Password))
+        var hasBootstrapEmail = !string.IsNullOrWhiteSpace(bootstrapOptions.Email);
+        var hasBootstrapPassword = !string.IsNullOrWhiteSpace(bootstrapOptions.Password);
+
+        if (!hasBootstrapEmail && !hasBootstrapPassword)
         {
             return;
         }
 
-        var existingAdmin = await userManager.FindByEmailAsync(bootstrapOptions.Email.Trim());
+        if (!hasBootstrapEmail || !hasBootstrapPassword)
+        {
+            throw new InvalidOperationException(
+                "Bootstrap administrator email and password must both be configured or both be empty.");
+        }
+
+        cancellationToken.ThrowIfCancellationRequested();
+        var bootstrapEmail = bootstrapOptions.Email.Trim();
+        var existingAdmin = await userManager.FindByEmailAsync(bootstrapEmail);
         if (existingAdmin is not null)
         {
+            if (!await userManager.IsInRoleAsync(existingAdmin, AppRoles.Administrator))
+            {
+                throw new InvalidOperationException(
+                    "The configured bootstrap administrator email belongs to an existing user without the Administrator role.");
+            }
+
+            logger.LogInformation("Bootstrap administrator {Email} already exists.", existingAdmin.Email);
             return;
         }
 
         var adminUser = new ApplicationUser
         {
-            UserName = bootstrapOptions.Email.Trim(),
-            Email = bootstrapOptions.Email.Trim(),
+            UserName = bootstrapEmail,
+            Email = bootstrapEmail,
             DisplayName = string.IsNullOrWhiteSpace(bootstrapOptions.DisplayName)
                 ? "Administrator"
                 : bootstrapOptions.DisplayName.Trim(),
@@ -76,13 +93,52 @@ public static class IdentityDataSeeder
             throw new InvalidOperationException($"Failed to seed bootstrap administrator: {errors}");
         }
 
-        var addRoleResult = await userManager.AddToRoleAsync(adminUser, AppRoles.Administrator);
-        if (!addRoleResult.Succeeded)
+        try
         {
-            var errors = string.Join("; ", addRoleResult.Errors.Select(error => error.Description));
-            throw new InvalidOperationException($"Failed to assign Administrator role: {errors}");
+            var addRoleResult = await userManager.AddToRoleAsync(adminUser, AppRoles.Administrator);
+            if (!addRoleResult.Succeeded)
+            {
+                var errors = string.Join("; ", addRoleResult.Errors.Select(error => error.Description));
+                throw new InvalidOperationException($"Failed to assign Administrator role: {errors}");
+            }
+        }
+        catch (Exception roleException)
+        {
+            var cleanupException = await TryDeleteIncompleteUserAsync(userManager, adminUser);
+            if (cleanupException is not null)
+            {
+                throw new AggregateException(
+                    "Bootstrap administrator role assignment and cleanup both failed.",
+                    roleException,
+                    cleanupException);
+            }
+
+            throw new InvalidOperationException(
+                "Failed to assign the Administrator role. The incomplete bootstrap user was removed.",
+                roleException);
         }
 
         logger.LogInformation("Seeded bootstrap administrator {Email}", adminUser.Email);
+    }
+
+    private static async Task<Exception?> TryDeleteIncompleteUserAsync(
+        UserManager<ApplicationUser> userManager,
+        ApplicationUser user)
+    {
+        try
+        {
+            var result = await userManager.DeleteAsync(user);
+            if (result.Succeeded)
+            {
+                return null;
+            }
+
+            var errors = string.Join("; ", result.Errors.Select(error => error.Description));
+            return new InvalidOperationException($"Failed to remove incomplete bootstrap user: {errors}");
+        }
+        catch (Exception exception)
+        {
+            return exception;
+        }
     }
 }

@@ -33,6 +33,7 @@ using PersonalBrand.Application.Skills;
 using PersonalBrand.Application.SocialLinks;
 using PersonalBrand.Application.Talks;
 using PersonalBrand.Application.Testimonials;
+using PersonalBrand.Infrastructure.Auditing;
 using PersonalBrand.Infrastructure.Auth;
 using PersonalBrand.Infrastructure.Awards;
 using PersonalBrand.Infrastructure.Blog;
@@ -47,10 +48,9 @@ using PersonalBrand.Infrastructure.Languages;
 using PersonalBrand.Infrastructure.Media;
 using PersonalBrand.Infrastructure.Navigation;
 using PersonalBrand.Infrastructure.Newsletter;
+using PersonalBrand.Infrastructure.Options;
 using PersonalBrand.Infrastructure.Pages;
 using PersonalBrand.Infrastructure.Partners;
-using PersonalBrand.Infrastructure.Settings;
-using PersonalBrand.Infrastructure.Options;
 using PersonalBrand.Infrastructure.Persistence;
 using PersonalBrand.Infrastructure.Profiles;
 using PersonalBrand.Infrastructure.Projects;
@@ -61,11 +61,12 @@ using PersonalBrand.Infrastructure.Schema;
 using PersonalBrand.Infrastructure.Search;
 using PersonalBrand.Infrastructure.Services;
 using PersonalBrand.Infrastructure.ServicesCatalog;
+using PersonalBrand.Infrastructure.Settings;
 using PersonalBrand.Infrastructure.Sitemap;
-using PersonalBrand.Infrastructure.Talks;
 using PersonalBrand.Infrastructure.Skills;
 using PersonalBrand.Infrastructure.SocialLinks;
 using PersonalBrand.Infrastructure.Storage;
+using PersonalBrand.Infrastructure.Talks;
 using PersonalBrand.Infrastructure.Testimonials;
 
 namespace PersonalBrand.Infrastructure;
@@ -87,9 +88,12 @@ public static class DependencyInjection
             .AddOptions<BootstrapAdminOptions>()
             .BindConfiguration(BootstrapAdminOptions.SectionName);
 
-        var connectionString = configuration.GetConnectionString("DefaultConnection")
-            ?? throw new InvalidOperationException(
-                "Connection string 'DefaultConnection' was not found. Configure it via appsettings or environment variables.");
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        if (string.IsNullOrWhiteSpace(connectionString))
+        {
+            throw new InvalidOperationException(
+                "Connection string 'DefaultConnection' is required. Configure it with user secrets or environment variables.");
+        }
 
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(connectionString, sqlOptions =>
@@ -116,8 +120,12 @@ public static class DependencyInjection
             .AddDefaultTokenProviders();
 
         services.AddScoped<IDateTimeProvider, SystemDateTimeProvider>();
-        services.AddScoped<IAuditLogger, SerilogAuditLogger>();
-        services.AddScoped<IFileStorage, LocalFileStorage>();
+        services.AddScoped<IAuditLogger, DatabaseAuditLogger>();
+        services.AddScoped<LocalFileStorage>();
+        services.AddScoped<IFileStorage>(serviceProvider =>
+            serviceProvider.GetRequiredService<LocalFileStorage>());
+        services.AddScoped<IFileStorageTransaction>(serviceProvider =>
+            serviceProvider.GetRequiredService<LocalFileStorage>());
         services.AddScoped<JwtTokenService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IProfileService, ProfileService>();

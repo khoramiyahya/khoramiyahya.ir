@@ -33,18 +33,38 @@ Dependency rule: `WebAPI → Application → Domain`, with `Infrastructure` impl
 
 See [docs/architecture/ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md).
 
+Initialization compliance and the latest corrective step are recorded in [docs/development/INITIALIZATION_STATUS.md](docs/development/INITIALIZATION_STATUS.md).
+
 ## Prerequisites
 
 - .NET SDK 10 (`global.json` pins `10.0.403`)
 - SQL Server or LocalDB
-- Optional: `dotnet tool install --global dotnet-ef`
+- Repository-local .NET tools restored with `dotnet tool restore`
 
 ## Configure SQL Server
 
-Update `ConnectionStrings:DefaultConnection` in:
+Development defaults to SQL Server LocalDB with Windows authentication. Tracked settings contain no database password, JWT signing key, or bootstrap administrator password.
 
-- `src/PersonalBrand.WebAPI/appsettings.Development.json` for local development
-- environment variables / host settings for Production
+Configure the required development JWT signing key with .NET user secrets:
+
+```bash
+dotnet user-secrets -p src/PersonalBrand.WebAPI set "Jwt:SigningKey" "<cryptographically-random-256-bit-secret>"
+```
+
+To use another SQL Server instance, keep its credentials outside the repository:
+
+```bash
+dotnet user-secrets -p src/PersonalBrand.WebAPI set "ConnectionStrings:DefaultConnection" "<sql-server-connection-string>"
+```
+
+An initial administrator is optional. Configure it only through user secrets or environment variables:
+
+```bash
+dotnet user-secrets -p src/PersonalBrand.WebAPI set "BootstrapAdmin:Email" "<admin-email>"
+dotnet user-secrets -p src/PersonalBrand.WebAPI set "BootstrapAdmin:Password" "<strong-unique-password>"
+```
+
+Bootstrap credentials are create-once values. Remove them from user secrets or the host environment immediately after the administrator is created successfully.
 
 Example LocalDB value:
 
@@ -52,10 +72,13 @@ Example LocalDB value:
 Server=(localdb)\mssqllocaldb;Database=PersonalBrandPlatform_Dev;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True
 ```
 
+For Production, provide at least `ConnectionStrings__DefaultConnection`, `Jwt__SigningKey`, and `Cors__AllowedOrigins__0` through the IIS hosting control panel or process environment. The SQL connection must use encryption and certificate validation. Never commit Production values. If a credential was previously committed, rotate it because removing it from the current file does not remove it from Git history.
+
 ## Run the project
 
 ```bash
 dotnet restore
+dotnet tool restore
 dotnet build
 dotnet run --project src/PersonalBrand.WebAPI
 ```
@@ -197,15 +220,17 @@ Useful endpoints:
 
 ## Apply EF Core migrations
 
-```bash
-dotnet ef migrations add InitialIdentity \
-  --project src/PersonalBrand.Infrastructure \
-  --startup-project src/PersonalBrand.WebAPI \
-  --output-dir Persistence/Migrations
+Apply the migrations already committed to the repository:
 
-dotnet ef database update \
-  --project src/PersonalBrand.Infrastructure \
-  --startup-project src/PersonalBrand.WebAPI
+```bash
+dotnet tool restore
+dotnet ef database update --project src/PersonalBrand.Infrastructure --startup-project src/PersonalBrand.WebAPI
+```
+
+When an intentional schema change requires a new migration, use a descriptive, unique name:
+
+```bash
+dotnet ef migrations add <MigrationName> --project src/PersonalBrand.Infrastructure --startup-project src/PersonalBrand.WebAPI --output-dir Persistence/Migrations
 ```
 
 ## Run tests
